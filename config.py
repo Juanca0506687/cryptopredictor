@@ -1,17 +1,21 @@
 import os
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'crypto_predictor_2024_secret_key'
-    DATABASE_FILE = os.environ.get('DATABASE_FILE') or 'crypto_data.json'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
+    DEBUG = False
+    TESTING = False
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    FLASK_ENV = 'development'
 
 class ProductionConfig(Config):
     DEBUG = False
+    FLASK_ENV = 'production'
 
 class TestingConfig(Config):
     TESTING = True
+    DEBUG = True
 
 config = {
     'development': DevelopmentConfig,

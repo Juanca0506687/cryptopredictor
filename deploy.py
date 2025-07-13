@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de despliegue automatizado para CryptoPredictor
+Script para preparar el proyecto CryptoPredictor para despliegue
 """
 
 import os
@@ -9,23 +9,47 @@ import sys
 import json
 from datetime import datetime
 
-def print_banner():
-    print("=" * 60)
-    print("🚀 CRYPTOPREDICTOR - DESPLIEGUE AUTOMATIZADO")
-    print("=" * 60)
-    print()
+def print_step(message):
+    """Imprimir paso con formato"""
+    print(f"\n{'='*50}")
+    print(f"🔄 {message}")
+    print(f"{'='*50}")
 
-def check_requirements():
-    """Verifica que todos los archivos necesarios estén presentes"""
+def run_command(command, description):
+    """Ejecutar comando y mostrar resultado"""
+    print(f"\n📋 {description}")
+    print(f"Comando: {command}")
+    
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Comando ejecutado exitosamente")
+            if result.stdout:
+                print(f"Salida: {result.stdout}")
+        else:
+            print(f"❌ Error: {result.stderr}")
+            return False
+    except Exception as e:
+        print(f"❌ Error ejecutando comando: {e}")
+        return False
+    
+    return True
+
+def check_files():
+    """Verificar que todos los archivos necesarios existan"""
+    print_step("Verificando archivos del proyecto")
+    
     required_files = [
-        'crypto_simple.py',
+        'app.py',
         'requirements.txt',
         'Procfile',
         'runtime.txt',
         'wsgi.py',
         'config.py',
-        'templates/simple.html',
-        '.gitignore'
+        '.gitignore',
+        'README.md',
+        'templates/index.html',
+        'templates/advanced_dashboard.html'
     ]
     
     missing_files = []
@@ -34,259 +58,149 @@ def check_requirements():
             missing_files.append(file)
     
     if missing_files:
-        print("❌ Archivos faltantes:")
-        for file in missing_files:
-            print(f"   - {file}")
+        print(f"❌ Archivos faltantes: {missing_files}")
         return False
+    else:
+        print("✅ Todos los archivos necesarios están presentes")
+        return True
+
+def initialize_git():
+    """Inicializar repositorio Git"""
+    print_step("Inicializando repositorio Git")
     
-    print("✅ Todos los archivos necesarios están presentes")
+    commands = [
+        ("git init", "Inicializando Git"),
+        ("git add .", "Agregando archivos"),
+        ("git commit -m 'Initial commit - CryptoPredictor ready for deployment'", "Haciendo commit inicial")
+    ]
+    
+    for command, description in commands:
+        if not run_command(command, description):
+            return False
+    
     return True
 
-def create_gitignore():
-    """Crea archivo .gitignore si no existe"""
-    if not os.path.exists('.gitignore'):
-        gitignore_content = """# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+def create_deployment_guide():
+    """Crear guía de despliegue"""
+    print_step("Creando guía de despliegue")
+    
+    guide = """
+# 🚀 Guía de Despliegue - CryptoPredictor
 
-# Virtual Environment
-venv/
-env/
-ENV/
+## Opciones de Despliegue
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+### 1. Railway (Recomendado - Más Fácil)
+1. Ve a [railway.app](https://railway.app)
+2. Regístrate con tu cuenta de GitHub
+3. Haz clic en "New Project"
+4. Selecciona "Deploy from GitHub repo"
+5. Conecta tu repositorio
+6. Railway detectará automáticamente que es una app Flask
+7. ¡Listo! Tu app estará disponible en unos minutos
 
-# OS
-.DS_Store
-Thumbs.db
+### 2. Render
+1. Ve a [render.com](https://render.com)
+2. Regístrate con tu cuenta de GitHub
+3. Haz clic en "New Web Service"
+4. Conecta tu repositorio de GitHub
+5. Configura:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
+   - Environment: `FLASK_ENV=production`
+6. Haz clic en "Create Web Service"
 
-# Application specific
-crypto_data.json
-*.log
-.env
+### 3. Heroku
+1. Instala Heroku CLI desde [heroku.com](https://heroku.com)
+2. Ejecuta en terminal:
+   ```bash
+   heroku login
+   heroku create tu-app-name
+   git push heroku main
+   ```
 
-# Heroku
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+## Variables de Entorno Recomendadas
+- `FLASK_ENV=production`
+- `SECRET_KEY=tu-clave-secreta-segura`
+
+## Verificación Post-Despliegue
+1. Verifica que la app responda en la URL proporcionada
+2. Prueba las funcionalidades principales
+3. Revisa los logs por errores
+
+¡Tu CryptoPredictor estará en línea! 🎉
 """
-        with open('.gitignore', 'w') as f:
-            f.write(gitignore_content)
-        print("✅ Archivo .gitignore creado")
+    
+    with open('DEPLOYMENT_GUIDE.md', 'w', encoding='utf-8') as f:
+        f.write(guide)
+    
+    print("✅ Guía de despliegue creada: DEPLOYMENT_GUIDE.md")
+    return True
 
-def create_readme():
-    """Crea archivo README.md si no existe"""
-    if not os.path.exists('README.md'):
-        readme_content = """# CryptoPredictor - Predicción de Criptomonedas con IA
-
-Una aplicación web moderna para predecir precios de criptomonedas utilizando inteligencia artificial y análisis técnico.
-
-## 🚀 Características
-
-- **Predicción de Precios**: Modelo de machine learning para predecir precios futuros
-- **Análisis Técnico**: Indicadores RSI, SMA y más
-- **Comparación de Criptomonedas**: Compara múltiples criptomonedas con score de oportunidad
-- **Interfaz Moderna**: Diseño responsive con Tailwind CSS
-- **Gráficos Interactivos**: Visualización de predicciones con Plotly
-
-## 🛠️ Tecnologías
-
-- **Backend**: Flask (Python)
-- **Machine Learning**: Scikit-learn
-- **Datos**: Yahoo Finance API
-- **Frontend**: HTML, JavaScript, Tailwind CSS
-- **Gráficos**: Plotly.js
-
-## 📋 Requisitos
-
-- Python 3.8 o superior
-- Conexión a internet
-
-## 🚀 Despliegue
-
-### Heroku
-```bash
-# Crear aplicación en Heroku
-heroku create tu-app-name
-
-# Configurar variables de entorno
-heroku config:set SECRET_KEY=tu_clave_secreta
-
-# Desplegar
-git push heroku main
-```
-
-### Railway
-```bash
-# Conectar con Railway
-railway login
-railway init
-railway up
-```
-
-### Render
-```bash
-# Conectar con Render
-# Crear nuevo Web Service
-# Conectar con GitHub
-# Configurar build command: pip install -r requirements.txt
-# Configurar start command: gunicorn crypto_simple:app
-```
-
-## 📊 Uso
-
-1. Accede a la aplicación web
-2. Selecciona una criptomoneda
-3. Elige el número de días a predecir
-4. Haz clic en "Predecir Precios"
-5. Revisa los resultados y consejos de inversión
-
-## ⚠️ Advertencia
-
-Esta aplicación es solo para fines educativos. Las predicciones no constituyen consejos financieros.
-
-## 📝 Licencia
-
-MIT License
-
----
-**¡Disfruta prediciendo el futuro de las criptomonedas! 🚀**
-"""
-        with open('README.md', 'w') as f:
-            f.write(readme_content)
-        print("✅ Archivo README.md creado")
-
-def setup_git():
-    """Configura Git si no está inicializado"""
-    if not os.path.exists('.git'):
-        try:
-            subprocess.run(['git', 'init'], check=True)
-            subprocess.run(['git', 'add', '.'], check=True)
-            subprocess.run(['git', 'commit', '-m', 'Initial commit - CryptoPredictor'], check=True)
-            print("✅ Repositorio Git inicializado")
-        except subprocess.CalledProcessError:
-            print("⚠️  No se pudo inicializar Git (puede que no esté instalado)")
-    else:
-        print("✅ Repositorio Git ya existe")
-
-def deploy_to_heroku():
-    """Guía para desplegar en Heroku"""
-    print("\n🌐 DESPLIEGUE EN HEROKU")
-    print("=" * 40)
-    print("1. Instala Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli")
-    print("2. Ejecuta estos comandos:")
-    print()
-    print("   # Login en Heroku")
-    print("   heroku login")
-    print()
-    print("   # Crear aplicación")
-    print("   heroku create tu-cryptopredictor-app")
-    print()
-    print("   # Configurar variables")
-    print("   heroku config:set SECRET_KEY=tu_clave_secreta_aqui")
-    print()
-    print("   # Desplegar")
-    print("   git push heroku main")
-    print()
-    print("   # Abrir aplicación")
-    print("   heroku open")
-    print()
-
-def deploy_to_railway():
-    """Guía para desplegar en Railway"""
-    print("\n🚂 DESPLIEGUE EN RAILWAY")
-    print("=" * 40)
-    print("1. Ve a https://railway.app")
-    print("2. Conecta tu cuenta de GitHub")
-    print("3. Crea un nuevo proyecto")
-    print("4. Selecciona 'Deploy from GitHub repo'")
-    print("5. Selecciona este repositorio")
-    print("6. Railway detectará automáticamente que es una app Flask")
-    print("7. ¡Listo! Tu app estará disponible en la URL que te proporcione Railway")
-    print()
-
-def deploy_to_render():
-    """Guía para desplegar en Render"""
-    print("\n🎨 DESPLIEGUE EN RENDER")
-    print("=" * 40)
-    print("1. Ve a https://render.com")
-    print("2. Conecta tu cuenta de GitHub")
-    print("3. Crea un nuevo 'Web Service'")
-    print("4. Selecciona este repositorio")
-    print("5. Configura:")
-    print("   - Build Command: pip install -r requirements.txt")
-    print("   - Start Command: gunicorn crypto_simple:app")
-    print("6. ¡Listo! Tu app estará disponible en la URL que te proporcione Render")
-    print()
+def create_app_json():
+    """Crear app.json para configuración de despliegue"""
+    print_step("Creando app.json para configuración")
+    
+    app_config = {
+        "name": "CryptoPredictor",
+        "description": "Predicción de criptomonedas con IA",
+        "repository": "https://github.com/tu-usuario/crypto-predictor",
+        "keywords": ["python", "flask", "cryptocurrency", "machine-learning", "prediction"],
+        "env": {
+            "FLASK_ENV": {
+                "description": "Environment de Flask",
+                "value": "production"
+            },
+            "SECRET_KEY": {
+                "description": "Clave secreta de Flask",
+                "generator": "secret"
+            }
+        },
+        "buildpacks": [
+            {
+                "url": "heroku/python"
+            }
+        ]
+    }
+    
+    with open('app.json', 'w', encoding='utf-8') as f:
+        json.dump(app_config, f, indent=2)
+    
+    print("✅ app.json creado")
+    return True
 
 def main():
-    print_banner()
+    """Función principal"""
+    print("🚀 Preparando CryptoPredictor para despliegue...")
+    print(f"📅 Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Verificar archivos
-    if not check_requirements():
-        print("\n❌ Por favor, asegúrate de que todos los archivos estén presentes")
-        return
+    if not check_files():
+        print("❌ Error: Faltan archivos necesarios")
+        sys.exit(1)
+    
+    # Inicializar Git
+    if not initialize_git():
+        print("❌ Error: No se pudo inicializar Git")
+        sys.exit(1)
     
     # Crear archivos adicionales
-    create_gitignore()
-    create_readme()
-    setup_git()
+    create_deployment_guide()
+    create_app_json()
     
-    print("\n🎉 ¡PREPARACIÓN COMPLETADA!")
-    print("=" * 40)
-    print("Tu aplicación está lista para ser desplegada.")
-    print("Elige una plataforma de despliegue:")
-    print()
-    print("1. Heroku (Recomendado para principiantes)")
-    print("2. Railway (Gratis, fácil de usar)")
-    print("3. Render (Gratis, bueno para proyectos)")
-    print()
-    
-    choice = input("¿Qué plataforma prefieres? (1/2/3): ").strip()
-    
-    if choice == "1":
-        deploy_to_heroku()
-    elif choice == "2":
-        deploy_to_railway()
-    elif choice == "3":
-        deploy_to_render()
-    else:
-        print("Mostrando todas las opciones:")
-        deploy_to_heroku()
-        deploy_to_railway()
-        deploy_to_render()
-    
-    print("\n📚 RECURSOS ADICIONALES:")
-    print("- Documentación Flask: https://flask.palletsprojects.com/")
-    print("- Heroku Dev Center: https://devcenter.heroku.com/")
-    print("- Railway Docs: https://docs.railway.app/")
-    print("- Render Docs: https://render.com/docs")
-    print()
-    print("¡Buena suerte con tu despliegue! 🚀")
+    print_step("🎉 ¡Proyecto listo para despliegue!")
+    print("""
+📋 Próximos pasos:
+1. Sube tu código a GitHub
+2. Elige una plataforma de despliegue
+3. Sigue la guía en DEPLOYMENT_GUIDE.md
+4. ¡Tu CryptoPredictor estará en línea!
+
+🔗 Archivos creados:
+- DEPLOYMENT_GUIDE.md (guía de despliegue)
+- app.json (configuración para Heroku)
+
+💡 Recomendación: Usa Railway para el despliegue más fácil
+""")
 
 if __name__ == "__main__":
     main() 

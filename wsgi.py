@@ -4,7 +4,7 @@ WSGI entry point para despliegue en producción
 """
 
 import os
-from crypto_simple import app
+from app import app
 
 if __name__ == "__main__":
     app.run() 

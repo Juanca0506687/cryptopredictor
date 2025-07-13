@@ -312,7 +312,7 @@ def compare_cryptos():
                 'price_change_7d': float(((predictions[-1] - current_price) / current_price * 100)) if predictions else 0.0,
                 'recommendation': advice['recommendation'],
                 'confidence': advice['confidence'],
-                'opportunity_score': int(opportunity_score),
+                'opportunity_score': float(opportunity_score),
                 'market_cap': float(info.get('marketCap', 0)),
                 'volume': float(info.get('volume', 0))
             })
@@ -1478,21 +1478,22 @@ def mark_notification_read():
 def scheduled_alerts_check():
     """Verificar alertas programadas"""
     try:
-        # Verificar alertas básicas
-        check_alerts()
-        
-        # Verificar alertas avanzadas
-        triggered = advanced_alert_system.check_advanced_alerts()
-        
-        # Enviar notificaciones si hay alertas activadas
-        for alert in triggered:
-            notification_system.add_notification(
-                user_id=1,  # Usuario por defecto
-                message=alert.get('message', 'Alerta activada'),
-                notification_type='alert'
-            )
-        
-        print(f"Verificación de alertas completada: {len(triggered)} alertas activadas")
+        with app.app_context():
+            # Verificar alertas básicas
+            check_alerts()
+            
+            # Verificar alertas avanzadas
+            triggered = advanced_alert_system.check_advanced_alerts()
+            
+            # Enviar notificaciones si hay alertas activadas
+            for alert in triggered:
+                notification_system.add_notification(
+                    user_id=1,  # Usuario por defecto
+                    message=alert.get('message', 'Alerta activada'),
+                    notification_type='alert'
+                )
+            
+            print(f"Verificación de alertas completada: {len(triggered)} alertas activadas")
     except Exception as e:
         print(f"Error en verificación programada de alertas: {e}")
 
