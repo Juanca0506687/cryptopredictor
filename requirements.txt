@@ -10,4 +10,4 @@ Pillow==10.0.1
 matplotlib==3.7.2
 seaborn==0.12.2
 schedule==1.2.0
-gunicorn==21.2.0 
+gunicorn==21.2.0
