@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoPredictor - Predicción de Criptomonedas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-chart-line text-3xl"></i>
+                    <h1 class="text-2xl font-bold">CryptoPredictor</h1>
+                </div>
+                <div class="text-sm opacity-90">
+                    Predicción Inteligente de Criptomonedas
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                Predice el Futuro de las Criptomonedas
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Utiliza inteligencia artificial para analizar patrones históricos y predecir tendencias futuras.
+            </p>
+        </div>
+
+        <!-- Market Overview -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-globe mr-2"></i>Visión General del Mercado
+            </h3>
+            <div id="market-overview" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Market data will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Prediction Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Prediction Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-magic mr-2"></i>Predicción de Precios
+                </h3>
+                
+                <form id="prediction-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Selecciona Criptomoneda
+                        </label>
+                        <select id="crypto-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="BTC-USD">Bitcoin (BTC)</option>
+                            <option value="ETH-USD">Ethereum (ETH)</option>
+                            <option value="BNB-USD">Binance Coin (BNB)</option>
+                            <option value="ADA-USD">Cardano (ADA)</option>
+                            <option value="SOL-USD">Solana (SOL)</option>
+                            <option value="DOT-USD">Polkadot (DOT)</option>
+                            <option value="DOGE-USD">Dogecoin (DOGE)</option>
+                            <option value="AVAX-USD">Avalanche (AVAX)</option>
+                            <option value="LINK-USD">Chainlink (LINK)</option>
+                            <option value="LTC-USD">Litecoin (LTC)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Días a Predecir
+                        </label>
+                        <input type="number" id="days-input" value="7" min="1" max="30" 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300">
+                        <i class="fas fa-crystal-ball mr-2"></i>Predecir Precios
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Display -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-area mr-2"></i>Resultados de la Predicción
+                </h3>
+                
+                <div id="prediction-results" class="space-y-4">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-chart-line text-4xl mb-4"></i>
+                        <p>Selecciona una criptomoneda y haz clic en "Predecir Precios" para ver los resultados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Tool -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-balance-scale mr-2"></i>Comparar Criptomonedas
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4" id="comparison-checkboxes">
+                <!-- Checkboxes will be loaded here -->
+            </div>
+            
+            <button id="compare-btn" class="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition-all duration-300">
+                <i class="fas fa-chart-bar mr-2"></i>Comparar Seleccionadas
+            </button>
+            
+            <div id="comparison-results" class="mt-6">
+                <!-- Results will be shown here -->
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-line mr-2"></i>Gráficos de Predicción
+            </h3>
+            
+            <div id="prediction-chart" class="w-full h-96">
+                <!-- Chart will be rendered here -->
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-history mr-2"></i>Historial de Predicciones
+            </h3>
+            
+            <div id="prediction-history" class="space-y-4">
+                <!-- History will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-lg font-semibold mb-2">CryptoPredictor</p>
+            <p class="text-gray-400">
+                Predicción inteligente de criptomonedas utilizando machine learning
+            </p>
+            <div class="mt-4 space-x-4">
+                <span class="text-sm text-gray-400">
+                    <i class="fas fa-shield-alt mr-1"></i>Datos en tiempo real
+                </span>
+                <span class="text-sm text-gray-400">
+                    <i class="fas fa-brain mr-1"></i>IA Avanzada
+                </span>
+                <span class="text-sm text-gray-400">
+                    <i class="fas fa-chart-line mr-1"></i>Análisis Técnico
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let popularCryptos = [];
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMarketOverview();
+            loadPopularCryptos();
+        });
+
+        // Load market overview
+        async function loadMarketOverview() {
+            try {
+                const response = await fetch('/api/market_overview');
+                const data = await response.json();
+                
+                const container = document.getElementById('market-overview');
+                container.innerHTML = '';
+                
+                data.forEach(crypto => {
+                    const changeClass = crypto.change_24h >= 0 ? 'text-green-600' : 'text-red-600';
+                    const changeIcon = crypto.change_24h >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+                    
+                    container.innerHTML += `
+                        <div class="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-all duration-300">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-gray-800">${crypto.symbol.replace('-USD', '')}</h4>
+                                <span class="text-sm text-gray-500">24h</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-800 mb-1">
+                                $${crypto.price.toLocaleString()}
+                            </div>
+                            <div class="flex items-center ${changeClass}">
+                                <i class="fas ${changeIcon} mr-1"></i>
+                                <span class="font-semibold">${crypto.change_24h.toFixed(2)}%</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading market overview:', error);
+            }
+        }
+
+        // Load popular cryptos
+        async function loadPopularCryptos() {
+            try {
+                const response = await fetch('/api/popular_cryptos');
+                popularCryptos = await response.json();
+                
+                const container = document.getElementById('comparison-checkboxes');
+                container.innerHTML = '';
+                
+                popularCryptos.forEach(crypto => {
+                    container.innerHTML += `
+                        <label class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
+                            <input type="checkbox" value="${crypto.symbol}" class="rounded text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm text-gray-700">${crypto.name}</span>
+                        </label>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading popular cryptos:', error);
+            }
+        }
+
+        // Prediction form handler
+        document.getElementById('prediction-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const symbol = document.getElementById('crypto-select').value;
+            const days = parseInt(document.getElementById('days-input').value);
+            
+            // Show loading
+            const resultsDiv = document.getElementById('prediction-results');
+            resultsDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-4xl text-blue-500 mb-4"></i>
+                    <p class="text-gray-600">Analizando datos y entrenando modelo...</p>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symbol, days })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `
+                        <div class="text-center py-8">
+                            <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                            <p class="text-red-600">${data.error}</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                displayPredictionResults(data);
+                updatePredictionChart(data);
+                loadPredictionHistory(symbol);
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+                        <p class="text-red-600">Error en la predicción: ${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+
+        // Display prediction results
+        function displayPredictionResults(data) {
+            const resultsDiv = document.getElementById('prediction-results');
+            
+            const avgPrediction = data.predictions.reduce((a, b) => a + b, 0) / data.predictions.length;
+            const priceChange = ((avgPrediction - data.current_price) / data.current_price) * 100;
+            
+            resultsDiv.innerHTML = `
+                <div class="space-y-4">
+                    <div class="text-center">
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">${data.symbol.replace('-USD', '')}</h4>
+                        <div class="text-3xl font-bold text-gray-800 mb-1">
+                            $${data.current_price.toLocaleString()}
+                        </div>
+                        <div class="text-sm text-gray-500">Precio actual</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-lg font-bold ${priceChange >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${priceChange >= 0 ? '+' : ''}${priceChange.toFixed(2)}%
+                            </div>
+                            <div class="text-sm text-gray-500">Cambio esperado</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-lg font-bold text-gray-800">
+                                $${avgPrediction.toFixed(2)}
+                            </div>
+                            <div class="text-sm text-gray-500">Precio promedio esperado</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h5 class="font-bold text-gray-800 mb-2">Consejos de Inversión:</h5>
+                        <p class="text-sm text-gray-700">${data.advice}</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500">RSI:</span>
+                            <span class="font-semibold ml-1">${data.metrics.rsi.toFixed(2)}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">SMA 20:</span>
+                            <span class="font-semibold ml-1">${data.metrics.sma_20.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update prediction chart
+        function updatePredictionChart(data) {
+            const dates = data.dates;
+            const predictions = data.predictions;
+            
+            const trace = {
+                x: dates,
+                y: predictions,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Predicción',
+                line: {
+                    color: '#3b82f6',
+                    width: 3
+                },
+                marker: {
+                    size: 8,
+                    color: '#3b82f6'
+                }
+            };
+            
+            const layout = {
+                title: `Predicción de Precios - ${data.symbol.replace('-USD', '')}`,
+                xaxis: {
+                    title: 'Fecha'
+                },
+                yaxis: {
+                    title: 'Precio ($)'
+                },
+                hovermode: 'closest'
+            };
+            
+            Plotly.newPlot('prediction-chart', [trace], layout);
+        }
+
+        // Load prediction history
+        async function loadPredictionHistory(symbol) {
+            try {
+                const response = await fetch(`/api/prediction_history/${symbol}`);
+                const history = await response.json();
+                
+                const container = document.getElementById('prediction-history');
+                container.innerHTML = '';
+                
+                if (history.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-history text-4xl mb-4"></i>
+                            <p>No hay predicciones previas para mostrar</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                history.slice(-5).reverse().forEach(prediction => {
+                    const date = new Date(prediction.timestamp).toLocaleDateString();
+                    const avgPred = prediction.predictions.reduce((a, b) => a + b, 0) / prediction.predictions.length;
+                    
+                    container.innerHTML += `
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-gray-800">${prediction.symbol.replace('-USD', '')}</span>
+                                <span class="text-sm text-gray-500">${date}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-500">Precio actual:</span>
+                                    <span class="font-semibold ml-1">$${prediction.current_price.toFixed(2)}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500">Promedio predicho:</span>
+                                    <span class="font-semibold ml-1">$${avgPred.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading prediction history:', error);
+            }
+        }
+
+        // Compare cryptos
+        document.getElementById('compare-btn').addEventListener('click', async function() {
+            const selectedCryptos = Array.from(document.querySelectorAll('#comparison-checkboxes input:checked'))
+                .map(cb => cb.value);
+            
+            if (selectedCryptos.length < 2) {
+                alert('Selecciona al menos 2 criptomonedas para comparar');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('comparison-results');
+            resultsDiv.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="fas fa-spinner fa-spin text-2xl text-green-500"></i>
+                    <p class="text-sm text-gray-600">Comparando criptomonedas...</p>
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/compare_cryptos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symbols: selectedCryptos })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p class="text-red-600 text-sm">${data.error}</p>`;
+                    return;
+                }
+                
+                resultsDiv.innerHTML = `
+                    <div class="space-y-3">
+                        ${data.map(crypto => `
+                            <div class="border border-gray-200 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-semibold text-gray-800">${crypto.symbol.replace('-USD', '')}</span>
+                                    <span class="text-sm px-2 py-1 rounded-full ${
+                                        crypto.opportunity_score >= 20 ? 'bg-green-100 text-green-800' :
+                                        crypto.opportunity_score >= 0 ? 'bg-yellow-100 text-yellow-800' :
+                                        'bg-red-100 text-red-800'
+                                    }">
+                                        Score: ${crypto.opportunity_score}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div>
+                                        <span class="text-gray-500">Precio:</span>
+                                        <span class="font-semibold ml-1">$${crypto.current_price.toFixed(2)}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">7d:</span>
+                                        <span class="font-semibold ml-1 ${crypto.change_7d >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                            ${crypto.change_7d >= 0 ? '+' : ''}${crypto.change_7d.toFixed(2)}%
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500">RSI:</span>
+                                        <span class="font-semibold ml-1">${crypto.rsi.toFixed(1)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<p class="text-red-600 text-sm">Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 

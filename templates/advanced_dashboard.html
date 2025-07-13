@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoPredictor AI - Dashboard Avanzado</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .search-results {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .crypto-card {
+            transition: all 0.2s ease;
+        }
+        .crypto-card:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-chart-line text-3xl"></i>
+                    <h1 class="text-3xl font-bold">CryptoPredictor AI - Dashboard Avanzado</h1>
+                </div>
+                <div class="text-sm opacity-90">
+                    <i class="fas fa-robot mr-2"></i>
+                    IA Avanzada para Predicción y Análisis de Criptomonedas
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 space-y-8">
+        <!-- Dashboard Resumen -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-tachometer-alt mr-2 text-blue-600"></i>
+                Dashboard General
+            </h2>
+            <div id="dashboardSummary" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- Análisis de Sentimiento -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-smile mr-2 text-pink-500"></i>
+                Análisis de Sentimiento
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="sentimentSymbol" placeholder="Símbolo (ej: BTC)" class="px-3 py-2 border rounded-lg">
+                <button onclick="analyzeSentiment()" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Analizar Sentimiento
+                </button>
+            </div>
+            <div id="sentimentResult"></div>
+        </section>
+
+        <!-- Backtesting de Estrategias -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-history mr-2 text-yellow-500"></i>
+                Backtesting de Estrategias
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="backtestSymbol" placeholder="Símbolo (ej: BTC)" class="px-3 py-2 border rounded-lg">
+                <select id="backtestStrategy" class="px-3 py-2 border rounded-lg">
+                    <option value="buy_and_hold">Buy & Hold</option>
+                    <option value="moving_average">Medias Móviles</option>
+                    <option value="rsi_strategy">RSI</option>
+                    <option value="momentum">Momentum</option>
+                </select>
+                <button onclick="runBacktest()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Ejecutar Backtest
+                </button>
+            </div>
+            <div id="backtestResult"></div>
+        </section>
+
+        <!-- Análisis Técnico Avanzado -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-chart-area mr-2 text-green-600"></i>
+                Análisis Técnico Avanzado
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="technicalSymbol" placeholder="Símbolo (ej: BTC)" class="px-3 py-2 border rounded-lg">
+                <button onclick="analyzeTechnical()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Analizar Técnico
+                </button>
+            </div>
+            <div id="technicalResult"></div>
+        </section>
+
+        <!-- Predicción Avanzada -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-robot mr-2 text-purple-600"></i>
+                Predicción Avanzada (ML)
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="mlSymbol" placeholder="Símbolo (ej: BTC)" class="px-3 py-2 border rounded-lg">
+                <select id="mlModel" class="px-3 py-2 border rounded-lg">
+                    <option value="random_forest">Random Forest</option>
+                    <option value="linear_regression">Regresión Lineal</option>
+                    <option value="svr">SVR</option>
+                    <option value="neural_network">Red Neuronal</option>
+                </select>
+                <input type="number" id="mlDays" value="7" min="1" max="30" class="px-3 py-2 border rounded-lg w-20">
+                <button onclick="predictML()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Predecir
+                </button>
+            </div>
+            <div id="mlResult"></div>
+        </section>
+
+        <!-- Exportación de Reportes -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-file-export mr-2 text-blue-400"></i>
+                Exportar Reporte del Mercado
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <select id="exportType" class="px-3 py-2 border rounded-lg">
+                    <option value="json">JSON</option>
+                    <option value="csv">CSV</option>
+                </select>
+                <button onclick="exportReport()" class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium">
+                    Exportar
+                </button>
+            </div>
+            <div id="exportResult"></div>
+        </section>
+
+        <!-- Alertas Avanzadas -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-bell mr-2 text-red-500"></i>
+                Alertas Avanzadas
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="alertSymbol" placeholder="Símbolo (ej: BTC)" class="px-3 py-2 border rounded-lg">
+                <select id="alertType" class="px-3 py-2 border rounded-lg">
+                    <option value="price">Precio</option>
+                    <option value="volume">Volumen</option>
+                    <option value="technical">Técnico</option>
+                    <option value="sentiment">Sentimiento</option>
+                </select>
+                <input type="text" id="alertConfig" placeholder="Config (ej: {\"target_price\":50000,\"type\":\"above\"})" class="px-3 py-2 border rounded-lg w-96">
+                <button onclick="addAdvancedAlert()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Agregar Alerta
+                </button>
+                <button onclick="checkAdvancedAlerts()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Verificar Alertas
+                </button>
+            </div>
+            <div id="alertResult"></div>
+        </section>
+
+        <!-- Registro de Usuario y Portafolio -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-user-plus mr-2 text-indigo-500"></i>
+                Registro de Usuario y Portafolio
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="text" id="regUsername" placeholder="Usuario" class="px-3 py-2 border rounded-lg">
+                <input type="email" id="regEmail" placeholder="Email" class="px-3 py-2 border rounded-lg">
+                <button onclick="registerUser()" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Registrar
+                </button>
+            </div>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="number" id="portfolioUserId" placeholder="User ID" class="px-3 py-2 border rounded-lg w-24">
+                <input type="text" id="portfolioData" placeholder='Portafolio (JSON)' class="px-3 py-2 border rounded-lg w-96">
+                <button onclick="savePortfolio()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium">
+                    Guardar Portafolio
+                </button>
+            </div>
+            <div id="userResult"></div>
+        </section>
+
+        <!-- Notificaciones -->
+        <section class="bg-white rounded-lg shadow-lg p-6 card-hover">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-bell mr-2 text-orange-400"></i>
+                Notificaciones
+            </h2>
+            <div class="flex gap-4 items-end mb-4">
+                <input type="number" id="notifUserId" placeholder="User ID" class="px-3 py-2 border rounded-lg w-24">
+                <button onclick="getNotifications()" class="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-lg font-medium">
+                    Ver Notificaciones
+                </button>
+            </div>
+            <div id="notifResult"></div>
+        </section>
+    </main>
+
+    <script>
+    // ============================================================================
+    // SCRIPTS PARA DASHBOARD AVANZADO
+    // ============================================================================
+
+    // Cargar datos del dashboard al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDashboardData();
+    });
+
+    // Función para cargar datos del dashboard
+    async function loadDashboardData() {
+        try {
+            const response = await fetch('/api/dashboard_data');
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('dashboardSummary').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const summary = data.market_summary;
+            const html = `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-800">Resumen del Mercado</h3>
+                    <p class="text-sm text-blue-600">Capitalización Total: $${(summary.total_market_cap / 1e9).toFixed(2)}B</p>
+                    <p class="text-sm text-blue-600">Cambio Promedio 24h: ${summary.avg_change_24h?.toFixed(2) || 'N/A'}%</p>
+                    <p class="text-sm text-blue-600">Sentimiento: ${summary.market_sentiment || 'N/A'}</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800">Top Performers</h3>
+                    <div class="space-y-2">
+                        ${data.top_performers?.slice(0, 3).map(crypto => 
+                            `<div class="text-sm">
+                                <span class="font-medium">${crypto.symbol}</span>: 
+                                <span class="${crypto.change_24h > 0 ? 'text-green-600' : 'text-red-600'}">
+                                    ${crypto.change_24h?.toFixed(2) || 'N/A'}%
+                                </span>
+                            </div>`
+                        ).join('') || 'No hay datos'}
+                    </div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-purple-800">Estadísticas</h3>
+                    <p class="text-sm text-purple-600">Alertas Activas: ${data.active_alerts || 0}</p>
+                    <p class="text-sm text-purple-600">Predicciones Recientes: ${data.recent_predictions || 0}</p>
+                    <p class="text-sm text-purple-600">Última Actualización: ${new Date(data.last_updated).toLocaleString()}</p>
+                </div>
+            `;
+            
+            document.getElementById('dashboardSummary').innerHTML = html;
+        } catch (error) {
+            console.error('Error cargando dashboard:', error);
+            document.getElementById('dashboardSummary').innerHTML = '<p class="text-red-500">Error cargando datos del dashboard</p>';
+        }
+    }
+
+    // Análisis de Sentimiento
+    async function analyzeSentiment() {
+        const symbol = document.getElementById('sentimentSymbol').value.toUpperCase();
+        if (!symbol) {
+            alert('Por favor ingresa un símbolo');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/sentiment_analysis/${symbol}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('sentimentResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-pink-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-pink-800">Análisis de Sentimiento - ${symbol}</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <p class="text-sm"><strong>Score:</strong> ${(data.sentiment_score * 100).toFixed(1)}%</p>
+                            <p class="text-sm"><strong>Etiqueta:</strong> ${data.sentiment_label}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm"><strong>Confianza:</strong> ${data.confidence}</p>
+                            <p class="text-sm"><strong>Noticias Analizadas:</strong> ${data.news_count}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('sentimentResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error analizando sentimiento:', error);
+            document.getElementById('sentimentResult').innerHTML = '<p class="text-red-500">Error analizando sentimiento</p>';
+        }
+    }
+
+    // Backtesting de Estrategias
+    async function runBacktest() {
+        const symbol = document.getElementById('backtestSymbol').value.toUpperCase();
+        const strategy = document.getElementById('backtestStrategy').value;
+        
+        if (!symbol) {
+            alert('Por favor ingresa un símbolo');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/backtest/${symbol}/${strategy}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('backtestResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-yellow-800">Resultados del Backtest - ${symbol}</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <p class="text-sm"><strong>Estrategia:</strong> ${data.strategy}</p>
+                            <p class="text-sm"><strong>Retorno Estrategia:</strong> ${data.returns?.toFixed(2) || 'N/A'}%</p>
+                        </div>
+                        <div>
+                            <p class="text-sm"><strong>Buy & Hold:</strong> ${data.buy_hold_return?.toFixed(2) || 'N/A'}%</p>
+                            <p class="text-sm"><strong>Exceso de Retorno:</strong> ${data.excess_return?.toFixed(2) || 'N/A'}%</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('backtestResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error ejecutando backtest:', error);
+            document.getElementById('backtestResult').innerHTML = '<p class="text-red-500">Error ejecutando backtest</p>';
+        }
+    }
+
+    // Análisis Técnico Avanzado
+    async function analyzeTechnical() {
+        const symbol = document.getElementById('technicalSymbol').value.toUpperCase();
+        if (!symbol) {
+            alert('Por favor ingresa un símbolo');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/technical_analysis/${symbol}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('technicalResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const indicators = data.indicators;
+            const html = `
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800">Análisis Técnico - ${symbol}</h3>
+                    <p class="text-sm"><strong>Precio Actual:</strong> $${data.current_price?.toFixed(2) || 'N/A'}</p>
+                    <p class="text-sm"><strong>Recomendación:</strong> <span class="font-bold ${data.recommendation === 'COMPRAR' ? 'text-green-600' : data.recommendation === 'VENDER' ? 'text-red-600' : 'text-yellow-600'}">${data.recommendation}</span></p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <h4 class="font-semibold text-green-700">Indicadores</h4>
+                            <p class="text-sm">SMA 20: ${indicators?.sma_20?.toFixed(2) || 'N/A'}</p>
+                            <p class="text-sm">SMA 50: ${indicators?.sma_50?.toFixed(2) || 'N/A'}</p>
+                            <p class="text-sm">RSI: ${indicators?.rsi?.toFixed(2) || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-green-700">Señales</h4>
+                            ${data.signals?.map(signal => `<p class="text-sm">• ${signal}</p>`).join('') || '<p class="text-sm">No hay señales</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('technicalResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error analizando técnico:', error);
+            document.getElementById('technicalResult').innerHTML = '<p class="text-red-500">Error analizando técnico</p>';
+        }
+    }
+
+    // Predicción Avanzada (ML)
+    async function predictML() {
+        const symbol = document.getElementById('mlSymbol').value.toUpperCase();
+        const model = document.getElementById('mlModel').value;
+        const days = document.getElementById('mlDays').value;
+        
+        if (!symbol) {
+            alert('Por favor ingresa un símbolo');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/advanced_prediction/${symbol}?model=${model}&days=${days}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('mlResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-purple-800">Predicción Avanzada - ${symbol}</h3>
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <p class="text-sm"><strong>Modelo:</strong> ${data.model_type}</p>
+                            <p class="text-sm"><strong>Confianza:</strong> ${data.confidence}</p>
+                            <p class="text-sm"><strong>Días Predichos:</strong> ${data.predictions?.length || 0}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm"><strong>Última Predicción:</strong> $${data.predictions?.[data.predictions.length - 1]?.toFixed(2) || 'N/A'}</p>
+                            <p class="text-sm"><strong>Rendimiento MSE:</strong> ${data.performance?.mse?.toFixed(4) || 'N/A'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('mlResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error en predicción ML:', error);
+            document.getElementById('mlResult').innerHTML = '<p class="text-red-500">Error en predicción ML</p>';
+        }
+    }
+
+    // Exportar Reporte
+    async function exportReport() {
+        const exportType = document.getElementById('exportType').value;
+        
+        try {
+            // Obtener datos del mercado
+            const marketResponse = await fetch('/api/market_overview');
+            const marketData = await marketResponse.json();
+            
+            const response = await fetch('/api/export_report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    type: exportType,
+                    data: marketData
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('exportResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-800">Reporte Exportado</h3>
+                    <p class="text-sm">Formato: ${exportType.toUpperCase()}</p>
+                    <button onclick="downloadReport('${exportType}', '${exportType === 'json' ? data.json_data : data.csv_data}')" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm mt-2">
+                        Descargar Reporte
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('exportResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error exportando reporte:', error);
+            document.getElementById('exportResult').innerHTML = '<p class="text-red-500">Error exportando reporte</p>';
+        }
+    }
+
+    // Descargar reporte
+    function downloadReport(type, data) {
+        const blob = new Blob([data], { type: type === 'json' ? 'application/json' : 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `crypto_report.${type}`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
+    // Alertas Avanzadas
+    async function addAdvancedAlert() {
+        const symbol = document.getElementById('alertSymbol').value.toUpperCase();
+        const alertType = document.getElementById('alertType').value;
+        const configText = document.getElementById('alertConfig').value;
+        
+        if (!symbol || !configText) {
+            alert('Por favor completa todos los campos');
+            return;
+        }
+
+        try {
+            const config = JSON.parse(configText);
+            const response = await fetch('/api/advanced_alert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    symbol: symbol,
+                    type: alertType,
+                    config: config
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('alertResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-red-800">Alerta Configurada</h3>
+                    <p class="text-sm">ID: ${data.alert_id}</p>
+                    <p class="text-sm">Mensaje: ${data.message}</p>
+                </div>
+            `;
+            
+            document.getElementById('alertResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error agregando alerta:', error);
+            document.getElementById('alertResult').innerHTML = '<p class="text-red-500">Error agregando alerta</p>';
+        }
+    }
+
+    async function checkAdvancedAlerts() {
+        try {
+            const response = await fetch('/api/check_advanced_alerts');
+            const data = await response.json();
+            
+            if (data.triggered_alerts && data.triggered_alerts.length > 0) {
+                const html = `
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-orange-800">Alertas Activadas</h3>
+                        ${data.triggered_alerts.map(alert => `
+                            <div class="mt-2 p-2 bg-orange-100 rounded">
+                                <p class="text-sm"><strong>${alert.symbol}</strong>: ${alert.message}</p>
+                                <p class="text-xs text-gray-600">Activada: ${new Date(alert.triggered_at).toLocaleString()}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('alertResult').innerHTML = html;
+            } else {
+                document.getElementById('alertResult').innerHTML = '<p class="text-green-600">No hay alertas activadas</p>';
+            }
+        } catch (error) {
+            console.error('Error verificando alertas:', error);
+            document.getElementById('alertResult').innerHTML = '<p class="text-red-500">Error verificando alertas</p>';
+        }
+    }
+
+    // Registro de Usuario
+    async function registerUser() {
+        const username = document.getElementById('regUsername').value;
+        const email = document.getElementById('regEmail').value;
+        
+        if (!username || !email) {
+            alert('Por favor completa todos los campos');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/register_user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('userResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-indigo-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-indigo-800">Usuario Registrado</h3>
+                    <p class="text-sm">ID: ${data.user_id}</p>
+                    <p class="text-sm">Mensaje: ${data.message}</p>
+                </div>
+            `;
+            
+            document.getElementById('userResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error registrando usuario:', error);
+            document.getElementById('userResult').innerHTML = '<p class="text-red-500">Error registrando usuario</p>';
+        }
+    }
+
+    // Guardar Portafolio
+    async function savePortfolio() {
+        const userId = document.getElementById('portfolioUserId').value;
+        const portfolioText = document.getElementById('portfolioData').value;
+        
+        if (!userId || !portfolioText) {
+            alert('Por favor completa todos los campos');
+            return;
+        }
+
+        try {
+            const portfolio = JSON.parse(portfolioText);
+            const response = await fetch('/api/save_portfolio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: parseInt(userId),
+                    portfolio: portfolio
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('userResult').innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+                return;
+            }
+
+            const html = `
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-800">Portafolio Guardado</h3>
+                    <p class="text-sm">Mensaje: ${data.message}</p>
+                </div>
+            `;
+            
+            document.getElementById('userResult').innerHTML = html;
+        } catch (error) {
+            console.error('Error guardando portafolio:', error);
+            document.getElementById('userResult').innerHTML = '<p class="text-red-500">Error guardando portafolio</p>';
+        }
+    }
+
+    // Notificaciones
+    async function getNotifications() {
+        const userId = document.getElementById('notifUserId').value;
+        
+        if (!userId) {
+            alert('Por favor ingresa un User ID');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/notifications/${userId}`);
+            const data = await response.json();
+            
+            if (data.length > 0) {
+                const html = `
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-orange-800">Notificaciones</h3>
+                        ${data.map(notif => `
+                            <div class="mt-2 p-2 bg-orange-100 rounded">
+                                <p class="text-sm"><strong>${notif.type}</strong>: ${notif.message}</p>
+                                <p class="text-xs text-gray-600">${new Date(notif.created_at).toLocaleString()}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('notifResult').innerHTML = html;
+            } else {
+                document.getElementById('notifResult').innerHTML = '<p class="text-gray-600">No hay notificaciones</p>';
+            }
+        } catch (error) {
+            console.error('Error obteniendo notificaciones:', error);
+            document.getElementById('notifResult').innerHTML = '<p class="text-red-500">Error obteniendo notificaciones</p>';
+        }
+    }
+    </script>
+</body>
+</html> 
