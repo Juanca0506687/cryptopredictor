@@ -1,263 +1,224 @@
-# 🚀 CryptoPredictor - Predicción de Criptomonedas con IA
+# 🛒 Tienda Online Cuba
 
-Una aplicación web completa y profesional para predecir precios de criptomonedas usando inteligencia artificial y análisis técnico avanzado.
+Una plataforma de comercio electrónico moderna desarrollada con Django, diseñada específicamente para el mercado cubano con soporte para múltiples monedas (CUP, USD, EUR).
 
-## 🌟 Características Principales
+## ✨ Características
 
-### 📊 **Predicción Inteligente**
-- Modelo de Machine Learning (Random Forest)
-- Análisis técnico avanzado
-- Predicciones a 7 días
-- Historial de predicciones
+### 🔐 Sistema de Autenticación
+- Registro e inicio de sesión de usuarios
+- Perfiles de usuario personalizados
+- Diferentes tipos de usuario (Cliente, Empleado, Administrador)
+- Sistema de permisos integrado
 
-### 📈 **Análisis Avanzado**
-- Comparación múltiple de criptomonedas
-- Score de oportunidad de inversión
-- Análisis de sentimiento de noticias
-- Backtesting de estrategias
+### 📦 Gestión de Productos
+- Catálogo completo de productos
+- Categorías organizadas
+- Múltiples imágenes por producto
+- Información detallada (nombre, descripción, código, precios, stock)
+- Soporte para múltiples monedas (CUP, USD, EUR)
+- Control de inventario
 
-### 🔔 **Sistema de Alertas**
-- Alertas de precio personalizadas
-- Notificaciones en tiempo real
-- Alertas técnicas avanzadas
-- Verificación automática
+### 🛠️ Panel de Administración
+- Interfaz de administración completa
+- Gestión de productos e inventario
+- Control de categorías
+- Gestión de usuarios
+- Reportes de stock y márgenes de ganancia
+- Acciones masivas para productos
 
-### 💼 **Gestión de Portafolio**
-- Simulación de portafolio virtual
-- Análisis de riesgo
-- Recomendaciones de inversión
-- Seguimiento de rendimiento
+### 🎨 Interfaz de Usuario
+- Diseño moderno inspirado en Amazon
+- Responsive design para móviles y desktop
+- Búsqueda avanzada con filtros
+- Paginación de productos
+- Animaciones y efectos visuales
+- Experiencia de usuario optimizada
 
-### 📊 **Dashboard Profesional**
-- Interfaz moderna con Tailwind CSS
-- Gráficos interactivos con Plotly
-- Vista general del mercado
-- Métricas en tiempo real
+## 🚀 Instalación
 
-## 🛠️ Instalación Local
-
-### Prerrequisitos
-- Python 3.12+
-- pip (gestor de paquetes)
+### Requisitos Previos
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
+- Git
 
 ### Pasos de Instalación
 
 1. **Clonar el repositorio**
-```bash
-git clone https://github.com/tu-usuario/crypto-predictor.git
-cd crypto-predictor
-```
+   ```bash
+   git clone <url-del-repositorio>
+   cd tienda_online
+   ```
 
 2. **Crear entorno virtual**
-```bash
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
-```
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # En Linux/Mac
+   # o
+   venv\Scripts\activate     # En Windows
+   ```
 
 3. **Instalar dependencias**
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. **Ejecutar la aplicación**
-```bash
-python app.py
-```
+4. **Configurar base de datos**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
-5. **Abrir en el navegador**
-```
-http://localhost:5000
-```
+5. **Crear superusuario**
+   ```bash
+   python manage.py createsuperuser
+   ```
 
-## 🚀 Despliegue en la Web
+6. **Ejecutar servidor de desarrollo**
+   ```bash
+   python manage.py runserver
+   ```
 
-### Opción 1: Railway (Recomendado)
-
-1. **Crear cuenta en Railway**
-   - Ve a [railway.app](https://railway.app)
-   - Regístrate con tu cuenta de GitHub
-
-2. **Conectar repositorio**
-   - Haz clic en "New Project"
-   - Selecciona "Deploy from GitHub repo"
-   - Conecta tu repositorio de GitHub
-
-3. **Configurar variables de entorno**
-   - Ve a la pestaña "Variables"
-   - Agrega: `FLASK_ENV=production`
-
-4. **Desplegar**
-   - Railway detectará automáticamente que es una app Flask
-   - Se desplegará automáticamente
-
-### Opción 2: Render
-
-1. **Crear cuenta en Render**
-   - Ve a [render.com](https://render.com)
-   - Regístrate con tu cuenta de GitHub
-
-2. **Crear nuevo servicio**
-   - Selecciona "Web Service"
-   - Conecta tu repositorio de GitHub
-
-3. **Configurar**
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Environment**: `FLASK_ENV=production`
-
-### Opción 3: Heroku
-
-1. **Instalar Heroku CLI**
-```bash
-# Descargar desde heroku.com
-```
-
-2. **Login y crear app**
-```bash
-heroku login
-heroku create tu-app-name
-```
-
-3. **Desplegar**
-```bash
-git add .
-git commit -m "Initial deployment"
-git push heroku main
-```
+7. **Acceder a la aplicación**
+   - Sitio web: http://127.0.0.1:8000/
+   - Panel admin: http://127.0.0.1:8000/admin/
 
 ## 📁 Estructura del Proyecto
 
 ```
-crypto-predictor/
-├── app.py                 # Aplicación principal Flask
-├── requirements.txt       # Dependencias Python
-├── Procfile             # Configuración para Heroku
-├── runtime.txt          # Versión de Python
-├── wsgi.py             # Servidor WSGI
-├── config.py           # Configuración de la app
-├── templates/          # Plantillas HTML
-│   ├── index.html      # Página principal
-│   └── advanced_dashboard.html
-├── static/             # Archivos estáticos
-│   ├── css/
-│   ├── js/
-│   └── images/
-└── README.md           # Este archivo
+tienda_online/
+├── tienda_online/          # Configuración principal del proyecto
+│   ├── settings.py         # Configuraciones de Django
+│   ├── urls.py            # URLs principales
+│   └── wsgi.py            # Configuración WSGI
+├── productos/             # Aplicación de productos
+│   ├── models.py          # Modelos de productos y categorías
+│   ├── views.py           # Vistas de productos
+│   ├── admin.py           # Configuración del admin
+│   └── urls.py            # URLs de productos
+├── usuarios/              # Aplicación de usuarios
+│   ├── models.py          # Modelo de perfil de usuario
+│   ├── views.py           # Vistas de autenticación
+│   ├── admin.py           # Configuración del admin
+│   └── urls.py            # URLs de usuarios
+├── templates/             # Plantillas HTML
+│   ├── base.html          # Plantilla base
+│   ├── productos/         # Plantillas de productos
+│   └── usuarios/          # Plantillas de usuarios
+├── static/                # Archivos estáticos
+│   ├── css/               # Estilos CSS
+│   ├── js/                # JavaScript
+│   └── img/               # Imágenes
+├── media/                 # Archivos subidos por usuarios
+├── requirements.txt       # Dependencias del proyecto
+└── README.md             # Este archivo
 ```
 
 ## 🔧 Configuración
 
 ### Variables de Entorno
+Para producción, es recomendable usar variables de entorno:
 
 ```bash
-# Desarrollo
-FLASK_ENV=development
-SECRET_KEY=tu-clave-secreta
-
-# Producción
-FLASK_ENV=production
-SECRET_KEY=clave-secreta-produccion
+# Crear archivo .env
+SECRET_KEY=tu-clave-secreta-aqui
+DEBUG=False
+ALLOWED_HOSTS=tu-dominio.com
 ```
 
-### Personalización
+### Base de Datos
+Por defecto usa SQLite para desarrollo. Para producción, configura PostgreSQL:
 
-- **Criptomonedas**: Edita `POPULAR_CRYPTOS` en `app.py`
-- **Modelo ML**: Modifica `CryptoPredictor` para cambiar el algoritmo
-- **Interfaz**: Edita las plantillas HTML en `templates/`
-
-## 📊 API Endpoints
-
-### Predicción
-- `POST /predict` - Predicción de precio
-- `GET /api/popular_cryptos` - Lista de criptomonedas
-- `POST /api/compare_cryptos` - Comparación múltiple
-
-### Alertas
-- `POST /api/set_alert` - Configurar alerta
-- `GET /api/check_alerts` - Verificar alertas
-- `DELETE /api/delete_alert` - Eliminar alerta
-
-### Análisis Avanzado
-- `GET /api/sentiment_analysis/<symbol>` - Análisis de sentimiento
-- `GET /api/technical_analysis/<symbol>` - Análisis técnico
-- `POST /api/backtest/<symbol>/<strategy>` - Backtesting
-
-## 🎯 Uso de la Aplicación
-
-### 1. **Predicción Básica**
-1. Selecciona una criptomoneda
-2. Haz clic en "Predecir"
-3. Revisa las predicciones y consejos
-
-### 2. **Comparación Múltiple**
-1. Selecciona hasta 5 criptomonedas
-2. Haz clic en "Comparar"
-3. Analiza el ranking por oportunidad
-
-### 3. **Configurar Alertas**
-1. Ve a la sección "Alertas"
-2. Establece precio objetivo
-3. Recibe notificaciones automáticas
-
-### 4. **Dashboard Avanzado**
-1. Accede a `/advanced_dashboard`
-2. Explora análisis técnico
-3. Prueba estrategias de backtesting
-
-## 🔒 Seguridad
-
-- ✅ Validación de entrada
-- ✅ Sanitización de datos
-- ✅ Manejo de errores
-- ✅ Rate limiting básico
-- ✅ Variables de entorno seguras
-
-## 🐛 Solución de Problemas
-
-### Error: "ModuleNotFoundError"
-```bash
-pip install -r requirements.txt
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tienda_online',
+        'USER': 'tu_usuario',
+        'PASSWORD': 'tu_password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 ```
 
-### Error: "Port already in use"
-```bash
-# Cambiar puerto en app.py
-app.run(port=5001)
-```
+## 📊 Modelos de Datos
 
-### Error: "JSON serialization"
-- Los datos se convierten automáticamente a tipos nativos de Python
+### Producto
+- Nombre, descripción, código único
+- Precios de compra y venta
+- Moneda (CUP, USD, EUR)
+- Stock y stock mínimo
+- Imágenes múltiples
+- Categoría, marca, dimensiones
+- Estado (disponible, agotado, descontinuado)
 
-## 📈 Roadmap
+### Categoría
+- Nombre único
+- Descripción e imagen
+- Estado activo/inactivo
 
-- [ ] Autenticación de usuarios
-- [ ] Base de datos PostgreSQL
-- [ ] Más modelos de ML
-- [ ] API pública
-- [ ] App móvil
-- [ ] Integración con exchanges
+### Perfil de Usuario
+- Extensión del modelo User de Django
+- Tipo de usuario (Cliente, Empleado, Admin)
+- Información de contacto y dirección
+- Avatar personalizado
+
+## 🛡️ Seguridad
+
+- Validación CSRF en todos los formularios
+- Autenticación requerida para acciones sensibles
+- Validación de datos en el servidor
+- Protección contra inyección SQL
+- Configuración segura por defecto
+
+## 🌐 Características Específicas para Cuba
+
+- **Monedas**: Soporte nativo para CUP, USD y EUR
+- **Zona horaria**: Configurada para America/Havana
+- **Idioma**: Interfaz en español
+- **Direcciones**: Campos adaptados para direcciones cubanas
+- **Contacto**: Formatos de teléfono cubanos
 
 ## 🤝 Contribuir
 
 1. Fork el proyecto
-2. Crea una rama: `git checkout -b feature/nueva-funcionalidad`
-3. Commit: `git commit -m 'Agregar nueva funcionalidad'`
-4. Push: `git push origin feature/nueva-funcionalidad`
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📄 Licencia
+## 📝 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
-## 📞 Soporte
+## 🆘 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/crypto-predictor/issues)
-- **Email**: soporte@cryptopredictor.com
-- **Documentación**: [Wiki del proyecto](https://github.com/tu-usuario/crypto-predictor/wiki)
+Si tienes problemas o preguntas:
+
+1. Revisa la documentación
+2. Busca en los issues existentes
+3. Crea un nuevo issue con detalles del problema
+
+## 🚀 Roadmap
+
+### Próximas características:
+- [ ] Sistema de carrito de compras
+- [ ] Proceso de checkout
+- [ ] Integración con pasarelas de pago
+- [ ] Sistema de reviews y calificaciones
+- [ ] Notificaciones por email
+- [ ] API REST
+- [ ] App móvil
+- [ ] Sistema de cupones y descuentos
+- [ ] Reportes avanzados
+- [ ] Integración con redes sociales
+
+## 📞 Contacto
+
+- **Email**: info@tiendacuba.com
+- **Teléfono**: +53 5555-5555
+- **Dirección**: La Habana, Cuba
 
 ---
 
-**⚠️ Descargo de Responsabilidad**: Esta aplicación es solo para fines educativos. No constituye consejo financiero. Siempre haz tu propia investigación antes de invertir.
-
-**⭐ Si te gusta el proyecto, ¡dale una estrella en GitHub!** 
+Desarrollado con ❤️ para el mercado cubano 

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mi Perfil - Tienda Online Cuba{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4><i class="fas fa-user"></i> Mi Perfil</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            {% if user.perfil.avatar %}
+                                <img src="{{ user.perfil.avatar.url }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="max-width: 150px;">
+                            {% else %}
+                                <i class="fas fa-user-circle fa-8x text-muted mb-3"></i>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h5>{{ user.perfil.nombre_completo|default:user.username }}</h5>
+                            <p class="text-muted">{{ user.perfil.get_tipo_usuario_display }}</p>
+                            
+                            <hr>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <strong>Usuario:</strong><br>
+                                    {{ user.username }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Email:</strong><br>
+                                    {{ user.email|default:"No especificado" }}
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-sm-6">
+                                    <strong>Teléfono:</strong><br>
+                                    {{ user.perfil.telefono|default:"No especificado" }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Ciudad:</strong><br>
+                                    {{ user.perfil.ciudad|default:"No especificado" }}
+                                </div>
+                            </div>
+                            
+                            {% if user.perfil.direccion %}
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <strong>Dirección:</strong><br>
+                                    {{ user.perfil.direccion }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="row mt-3">
+                                <div class="col-sm-6">
+                                    <strong>Miembro desde:</strong><br>
+                                    {{ user.date_joined|date:"d/m/Y" }}
+                                </div>
+                                <div class="col-sm-6">
+                                    <strong>Estado:</strong><br>
+                                    {% if user.perfil.activo %}
+                                        <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactivo</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <a href="#" class="btn btn-primary me-2">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary">
+                            <i class="fas fa-key"></i> Cambiar Contraseña
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

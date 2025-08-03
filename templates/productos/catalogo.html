@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Catálogo - Tienda Online Cuba{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active">Catálogo</li>
+        </ol>
+    </nav>
+    
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Catálogo de Productos</h1>
+            <p class="text-muted">Encuentra todo lo que necesitas</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <span class="text-muted">
+                {{ page_obj.paginator.count }} producto{{ page_obj.paginator.count|pluralize }}
+            </span>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-filter"></i> Filtros</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" id="filterForm">
+                        <!-- Search -->
+                        <div class="mb-3">
+                            <label class="form-label">Buscar</label>
+                            <input type="text" name="q" class="form-control" 
+                                   placeholder="Buscar productos..." 
+                                   value="{{ busqueda }}">
+                        </div>
+                        
+                        <!-- Categories -->
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <select name="categoria" class="form-select">
+                                <option value="">Todas las categorías</option>
+                                {% for categoria in categorias %}
+                                    <option value="{{ categoria.pk }}" 
+                                            {% if categoria.pk|stringformat:"s" == categoria_seleccionada %}selected{% endif %}>
+                                        {{ categoria.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="mb-3">
+                            <label class="form-label">Ordenar por</label>
+                            <select name="ordenar" class="form-select">
+                                <option value="nombre" {% if ordenar == 'nombre' %}selected{% endif %}>
+                                    Nombre A-Z
+                                </option>
+                                <option value="precio_asc" {% if ordenar == 'precio_asc' %}selected{% endif %}>
+                                    Precio: Menor a Mayor
+                                </option>
+                                <option value="precio_desc" {% if ordenar == 'precio_desc' %}selected{% endif %}>
+                                    Precio: Mayor a Menor
+                                </option>
+                                <option value="fecha" {% if ordenar == 'fecha' %}selected{% endif %}>
+                                    Más Recientes
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Aplicar Filtros
+                            </button>
+                            <a href="{% url 'catalogo' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="col-lg-9">
+            {% if page_obj %}
+                <div class="row">
+                    {% for producto in page_obj %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="product-card card h-100 shadow-sm">
+                            <div class="position-relative">
+                                {% if producto.imagen_principal %}
+                                    <img src="{{ producto.imagen_principal.url }}" 
+                                         class="card-img-top" 
+                                         alt="{{ producto.nombre }}" 
+                                         style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                                         style="height: 200px;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if producto.destacado %}
+                                    <span class="badge bg-warning position-absolute top-0 start-0 m-2">
+                                        Destacado
+                                    </span>
+                                {% endif %}
+                                
+                                {% if not producto.disponible %}
+                                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                        Agotado
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h6 class="card-title">{{ producto.nombre }}</h6>
+                                <p class="card-text text-muted small flex-grow-1">
+                                    {{ producto.descripcion|truncatewords:15 }}
+                                </p>
+                                
+                                <div class="product-info mb-3">
+                                    <div class="price-section">
+                                        <span class="h5 text-primary fw-bold">
+                                            {{ producto.precio_venta }} {{ producto.moneda }}
+                                        </span>
+                                    </div>
+                                    
+                                    {% if producto.marca %}
+                                        <small class="text-muted">{{ producto.marca }}</small>
+                                    {% endif %}
+                                    
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-barcode"></i> {{ producto.codigo }}
+                                        </small>
+                                        <br>
+                                        <small class="text-muted">
+                                            <i class="fas fa-boxes"></i> Stock: {{ producto.stock }}
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <a href="{% url 'producto_detalle' producto.pk %}" 
+                                       class="btn btn-primary">
+                                        <i class="fas fa-eye"></i> Ver Detalles
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Paginación de productos">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if busqueda %}q={{ busqueda }}&{% endif %}{% if categoria_seleccionada %}categoria={{ categoria_seleccionada }}&{% endif %}{% if ordenar %}ordenar={{ ordenar }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% if busqueda %}q={{ busqueda }}&{% endif %}{% if categoria_seleccionada %}categoria={{ categoria_seleccionada }}&{% endif %}{% if ordenar %}ordenar={{ ordenar }}&{% endif %}page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if busqueda %}q={{ busqueda }}&{% endif %}{% if categoria_seleccionada %}categoria={{ categoria_seleccionada }}&{% endif %}{% if ordenar %}ordenar={{ ordenar }}&{% endif %}page={{ page_obj.next_page_number }}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No se encontraron productos</h4>
+                    <p class="text-muted">Intenta con otros filtros de búsqueda.</p>
+                    <a href="{% url 'catalogo' %}" class="btn btn-primary">
+                        Ver todos los productos
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.product-card:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-img-top {
+    border-radius: 10px 10px 0 0;
+}
+
+.price-section {
+    border-left: 3px solid #0d6efd;
+    padding-left: 10px;
+}
+</style>
+{% endblock %}
