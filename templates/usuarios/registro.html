@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrarse - Tienda Cuba{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-plus fa-4x text-success mb-3"></i>
+                        <h2 class="h4 fw-bold">Crear Cuenta</h2>
+                        <p class="text-muted">Únete a Tienda Cuba y disfruta de nuestros productos</p>
+                    </div>
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                <i class="fas fa-user me-1"></i> Usuario
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="{{ form.username.id_for_label }}"
+                                   name="{{ form.username.name }}"
+                                   value="{{ form.username.value|default:'' }}"
+                                   required
+                                   placeholder="Elige tu nombre de usuario">
+                            {% if form.username.help_text %}
+                                <div class="form-text">{{ form.username.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                <i class="fas fa-lock me-1"></i> Contraseña
+                            </label>
+                            <input type="password" 
+                                   class="form-control form-control-lg" 
+                                   id="{{ form.password1.id_for_label }}"
+                                   name="{{ form.password1.name }}"
+                                   required
+                                   placeholder="Crea una contraseña segura">
+                            {% if form.password1.help_text %}
+                                <div class="form-text">{{ form.password1.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                <i class="fas fa-lock me-1"></i> Confirmar Contraseña
+                            </label>
+                            <input type="password" 
+                                   class="form-control form-control-lg" 
+                                   id="{{ form.password2.id_for_label }}"
+                                   name="{{ form.password2.name }}"
+                                   required
+                                   placeholder="Confirma tu contraseña">
+                            {% if form.password2.help_text %}
+                                <div class="form-text">{{ form.password2.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-user-plus me-1"></i> Crear Cuenta
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">¿Ya tienes una cuenta?</p>
+                            <a href="{% url 'usuarios:login' %}" class="text-decoration-none">
+                                <i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="{% url 'productos:home' %}" class="text-muted text-decoration-none">
+                    <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información adicional -->
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                    <h6>Seguro y Protegido</h6>
+                    <small class="text-muted">Tus datos están seguros con nosotros</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-gift fa-2x text-warning mb-2"></i>
+                    <h6>Ofertas Exclusivas</h6>
+                    <small class="text-muted">Acceso a promociones especiales</small>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <i class="fas fa-truck fa-2x text-info mb-2"></i>
+                    <h6>Envío Gratis</h6>
+                    <small class="text-muted">En compras superiores a $50</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

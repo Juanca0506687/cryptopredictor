@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil - Tienda Cuba{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Información del usuario -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                    <h4>{{ user.username }}</h4>
+                    {% if user.first_name or user.last_name %}
+                        <p class="text-muted">{{ user.first_name }} {{ user.last_name }}</p>
+                    {% endif %}
+                    <p class="text-muted">
+                        <i class="fas fa-envelope me-1"></i>
+                        {{ user.email|default:"No especificado" }}
+                    </p>
+                    
+                    {% if user.perfil %}
+                        <div class="mt-3">
+                            <span class="badge bg-primary">{{ user.perfil.get_tipo_usuario_display }}</span>
+                        </div>
+                        
+                        {% if user.perfil.telefono %}
+                            <p class="text-muted mt-2">
+                                <i class="fas fa-phone me-1"></i>
+                                {{ user.perfil.telefono }}
+                            </p>
+                        {% endif %}
+                        
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            Miembro desde {{ user.perfil.fecha_registro|date:"F Y" }}
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Estadísticas del usuario -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-bar"></i> Mis Estadísticas
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="p-2">
+                                <i class="fas fa-shopping-cart fa-2x text-success mb-2"></i>
+                                <div class="fw-bold">0</div>
+                                <small class="text-muted">Compras</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2">
+                                <i class="fas fa-heart fa-2x text-danger mb-2"></i>
+                                <div class="fw-bold">0</div>
+                                <small class="text-muted">Favoritos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <!-- Información de la cuenta -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-edit"></i> Información de la Cuenta
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nombre de Usuario</label>
+                            <p class="form-control-plaintext">{{ user.username }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <p class="form-control-plaintext">{{ user.email|default:"No especificado" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nombre</label>
+                            <p class="form-control-plaintext">{{ user.first_name|default:"No especificado" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Apellidos</label>
+                            <p class="form-control-plaintext">{{ user.last_name|default:"No especificado" }}</p>
+                        </div>
+                        
+                        {% if user.perfil %}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Teléfono</label>
+                                <p class="form-control-plaintext">{{ user.perfil.telefono|default:"No especificado" }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Fecha de Nacimiento</label>
+                                <p class="form-control-plaintext">{{ user.perfil.fecha_nacimiento|default:"No especificado" }}</p>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-bold">Dirección</label>
+                                <p class="form-control-plaintext">{{ user.perfil.direccion|default:"No especificado" }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="text-end">
+                        <button class="btn btn-primary" onclick="alert('Función de edición no implementada en esta demo')">
+                            <i class="fas fa-edit"></i> Editar Información
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Historial de compras -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history"></i> Historial de Compras
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center py-4">
+                        <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                        <h6>No tienes compras aún</h6>
+                        <p class="text-muted">Cuando realices tu primera compra, aparecerá aquí.</p>
+                        <a href="{% url 'productos:catalogo' %}" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Explorar Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de deseos -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-heart"></i> Lista de Deseos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center py-4">
+                        <i class="fas fa-heart fa-3x text-muted mb-3"></i>
+                        <h6>Tu lista de deseos está vacía</h6>
+                        <p class="text-muted">Guarda los productos que te gusten para comprarlos más tarde.</p>
+                        <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-search"></i> Buscar Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Configuración de cuenta -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cog"></i> Configuración de Cuenta
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-outline-primary w-100" onclick="alert('Función no implementada en esta demo')">
+                                <i class="fas fa-key"></i> Cambiar Contraseña
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-outline-info w-100" onclick="alert('Función no implementada en esta demo')">
+                                <i class="fas fa-bell"></i> Notificaciones
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <button class="btn btn-outline-warning w-100" onclick="alert('Función no implementada en esta demo')">
+                                <i class="fas fa-shield-alt"></i> Privacidad
+                            </button>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'usuarios:logout' %}" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
