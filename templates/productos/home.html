@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}Tienda Cuba - Tu tienda online en Cuba{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Bienvenido a Tienda Cuba</h1>
+                <p class="lead mb-4">Descubre los mejores productos a precios increíbles. Calidad garantizada y envío a toda Cuba.</p>
+                <a href="{% url 'productos:catalogo' %}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-shopping-cart"></i> Explorar Catálogo
+                </a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-store fa-10x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Productos Destacados -->
+{% if productos_destacados %}
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 fw-bold">
+                    <i class="fas fa-star text-warning"></i> Productos Destacados
+                </h2>
+                <p class="text-muted">Los productos más populares y mejor valorados</p>
+            </div>
+        </div>
+        
+        <div class="product-grid">
+            {% for producto in productos_destacados %}
+            <div class="card h-100">
+                <div class="position-relative">
+                    {% if producto.imagen_principal %}
+                        <img src="{{ producto.imagen_principal.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    {% if producto.destacado %}
+                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">
+                            <i class="fas fa-star"></i> Destacado
+                        </span>
+                    {% endif %}
+                    
+                    {% if producto.stock_bajo %}
+                        <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                            ¡Últimas unidades!
+                        </span>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text text-muted small flex-grow-1">
+                        {{ producto.descripcion|truncatewords:15 }}
+                    </p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="price">${{ producto.precio_venta }} {{ producto.moneda }}</span>
+                            <small class="text-muted">Stock: {{ producto.stock }}</small>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a href="{% url 'productos:detalle' producto.pk %}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-primary">
+                Ver Todos los Productos <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Categorías -->
+{% if categorias %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 fw-bold">
+                    <i class="fas fa-th-large text-primary"></i> Comprar por Categorías
+                </h2>
+                <p class="text-muted">Encuentra exactamente lo que buscas</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for categoria in categorias %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'productos:categoria' categoria.pk %}" class="text-decoration-none">
+                    <div class="category-card h-100">
+                        <i class="fas fa-box fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold">{{ categoria.nombre }}</h5>
+                        <p class="text-muted">{{ categoria.descripcion|default:"Explora esta categoría" }}</p>
+                        <small class="text-primary">{{ categoria.producto_set.count }} productos</small>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Productos Recientes -->
+{% if productos_recientes %}
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 fw-bold">
+                    <i class="fas fa-clock text-info"></i> Productos Recientes
+                </h2>
+                <p class="text-muted">Las últimas novedades en nuestra tienda</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for producto in productos_recientes %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="position-relative">
+                        {% if producto.imagen_principal %}
+                            <img src="{{ producto.imagen_principal.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <span class="badge bg-info position-absolute top-0 start-0 m-2">
+                            <i class="fas fa-plus"></i> Nuevo
+                        </span>
+                    </div>
+                    
+                    <div class="card-body">
+                        <h6 class="card-title">{{ producto.nombre }}</h6>
+                        <p class="card-text text-muted small">
+                            {{ producto.descripcion|truncatewords:10 }}
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price">${{ producto.precio_venta }} {{ producto.moneda }}</span>
+                            <a href="{% url 'productos:detalle' producto.pk %}" class="btn btn-sm btn-outline-primary">
+                                Ver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">¿Listo para empezar a comprar?</h2>
+        <p class="lead mb-4">Únete a miles de cubanos que ya confían en nosotros</p>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-shipping-fast fa-2x mb-2"></i>
+                        <h5>Envío Rápido</h5>
+                        <p class="small">A toda Cuba</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                        <h5>Calidad Garantizada</h5>
+                        <p class="small">Productos verificados</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <i class="fas fa-headset fa-2x mb-2"></i>
+                        <h5>Soporte 24/7</h5>
+                        <p class="small">Estamos aquí para ayudarte</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'usuarios:registro' %}" class="btn btn-warning btn-lg me-3">
+                    <i class="fas fa-user-plus"></i> Crear Cuenta
+                </a>
+            {% endif %}
+            <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-shopping-cart"></i> Ver Catálogo
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

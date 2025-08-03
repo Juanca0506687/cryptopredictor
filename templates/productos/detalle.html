@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ producto.nombre }} - Tienda Cuba{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'productos:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'productos:catalogo' %}">Catálogo</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'productos:categoria' producto.categoria.pk %}">{{ producto.categoria.nombre }}</a></li>
+            <li class="breadcrumb-item active">{{ producto.nombre }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body p-0">
+                    {% if producto.imagen_principal %}
+                        <img src="{{ producto.imagen_principal.url }}" class="img-fluid rounded" alt="{{ producto.nombre }}" style="width: 100%; height: 400px; object-fit: cover;">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 400px;">
+                            <i class="fas fa-image fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Imágenes adicionales -->
+            <div class="row mt-3">
+                {% if producto.imagen_2 %}
+                <div class="col-4">
+                    <img src="{{ producto.imagen_2.url }}" class="img-fluid rounded" alt="{{ producto.nombre }}" style="height: 100px; object-fit: cover;">
+                </div>
+                {% endif %}
+                {% if producto.imagen_3 %}
+                <div class="col-4">
+                    <img src="{{ producto.imagen_3.url }}" class="img-fluid rounded" alt="{{ producto.nombre }}" style="height: 100px; object-fit: cover;">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Información del producto -->
+        <div class="col-lg-6">
+            <div class="mb-3">
+                {% if producto.destacado %}
+                    <span class="badge bg-warning me-2">
+                        <i class="fas fa-star"></i> Destacado
+                    </span>
+                {% endif %}
+                
+                {% if producto.stock_bajo %}
+                    <span class="badge bg-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Stock Bajo
+                    </span>
+                {% endif %}
+            </div>
+            
+            <h1 class="h2 fw-bold mb-3">{{ producto.nombre }}</h1>
+            
+            <div class="mb-3">
+                <span class="text-muted">Código:</span>
+                <strong>{{ producto.codigo }}</strong>
+            </div>
+            
+            <div class="mb-3">
+                <span class="text-muted">Categoría:</span>
+                <a href="{% url 'productos:categoria' producto.categoria.pk %}" class="text-decoration-none">
+                    <strong>{{ producto.categoria.nombre }}</strong>
+                </a>
+            </div>
+            
+            <!-- Precio -->
+            <div class="mb-4">
+                <div class="d-flex align-items-center">
+                    <span class="price h3 mb-0 me-3">${{ producto.precio_venta }} {{ producto.moneda }}</span>
+                    {% if producto.margen_ganancia > 0 %}
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up"></i> {{ producto.margen_ganancia|floatformat:1 }}% margen
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Stock -->
+            <div class="mb-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-box me-2 text-muted"></i>
+                    {% if producto.stock > 0 %}
+                        <span class="text-success">
+                            <strong>{{ producto.stock }} unidades disponibles</strong>
+                        </span>
+                    {% else %}
+                        <span class="text-danger">
+                            <strong>Producto agotado</strong>
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Descripción -->
+            <div class="mb-4">
+                <h5>Descripción</h5>
+                <p class="text-muted">{{ producto.descripcion }}</p>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="row mb-4">
+                <div class="col-6">
+                    <div class="text-center p-3 bg-light rounded">
+                        <i class="fas fa-eye fa-2x text-primary mb-2"></i>
+                        <div class="fw-bold">{{ producto.vistas }}</div>
+                        <small class="text-muted">Vistas</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="text-center p-3 bg-light rounded">
+                        <i class="fas fa-shopping-cart fa-2x text-success mb-2"></i>
+                        <div class="fw-bold">{{ producto.ventas_totales }}</div>
+                        <small class="text-muted">Ventas</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Acciones -->
+            <div class="d-grid gap-2">
+                {% if producto.stock > 0 %}
+                    <button class="btn btn-primary btn-lg" onclick="alert('Función de compra no implementada en esta demo')">
+                        <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="alert('Función de compra no implementada en esta demo')">
+                        <i class="fas fa-bolt"></i> Comprar Ahora
+                    </button>
+                {% else %}
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="fas fa-times"></i> Producto Agotado
+                    </button>
+                {% endif %}
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>
+                    Agregado el {{ producto.fecha_creacion|date:"d/m/Y" }}
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Productos relacionados -->
+    {% if productos_relacionados %}
+    <div class="mt-5">
+        <h3 class="mb-4">
+            <i class="fas fa-tags text-primary"></i> Productos Relacionados
+        </h3>
+        
+        <div class="row">
+            {% for relacionado in productos_relacionados %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="position-relative">
+                        {% if relacionado.imagen_principal %}
+                            <img src="{{ relacionado.imagen_principal.url }}" class="card-img-top" alt="{{ relacionado.nombre }}" style="height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 150px;">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        {% if relacionado.destacado %}
+                            <span class="badge bg-warning position-absolute top-0 start-0 m-2">
+                                <i class="fas fa-star"></i>
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title">{{ relacionado.nombre }}</h6>
+                        <p class="card-text text-muted small flex-grow-1">
+                            {{ relacionado.descripcion|truncatewords:8 }}
+                        </p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="price">${{ relacionado.precio_venta }} {{ relacionado.moneda }}</span>
+                            </div>
+                            <div class="d-grid">
+                                <a href="{% url 'productos:detalle' relacionado.pk %}" class="btn btn-sm btn-outline-primary">
+                                    Ver Producto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
