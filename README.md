@@ -1,263 +1,278 @@
-# 🚀 CryptoPredictor - Predicción de Criptomonedas con IA
+# 🔧 Óptica MIPYME - Sistema de Gestión Integral
 
-Una aplicación web completa y profesional para predecir precios de criptomonedas usando inteligencia artificial y análisis técnico avanzado.
+Sistema completo de gestión para una MIPYME de venta de espejuelos graduados en Cuba, desarrollado con Django. Incluye gestión de productos, ventas, clientes, taller y reportes con funcionalidad offline.
 
-## 🌟 Características Principales
+## ✨ Características Principales
 
-### 📊 **Predicción Inteligente**
-- Modelo de Machine Learning (Random Forest)
-- Análisis técnico avanzado
-- Predicciones a 7 días
-- Historial de predicciones
+### 🔐 Sistema Multiusuario
+- **Administrador**: Acceso completo al sistema
+- **Vendedor**: Gestión de ventas y clientes
+- **Técnico**: Gestión del taller y órdenes de trabajo
 
-### 📈 **Análisis Avanzado**
-- Comparación múltiple de criptomonedas
-- Score de oportunidad de inversión
-- Análisis de sentimiento de noticias
-- Backtesting de estrategias
+### 📦 Gestión de Productos
+- **Monturas**: Registro con foto, precio, stock y características
+- **Cristales**: Diferentes graduaciones y tratamientos
+- **Control de inventario** con alertas de bajo stock
+- **Movimientos de inventario** automáticos
 
-### 🔔 **Sistema de Alertas**
-- Alertas de precio personalizadas
-- Notificaciones en tiempo real
-- Alertas técnicas avanzadas
-- Verificación automática
+### 💰 Sistema de Ventas
+- **Facturas** con numeración automática
+- **Control de pagos** en múltiples monedas (CUP, USD, EUR, MLC)
+- **Descuentos** y promociones
+- **Generación de recibos** en PDF
 
-### 💼 **Gestión de Portafolio**
-- Simulación de portafolio virtual
-- Análisis de riesgo
-- Recomendaciones de inversión
-- Seguimiento de rendimiento
+### 👥 Gestión de Clientes
+- **Registro completo** de datos personales
+- **Historial de compras**
+- **Recetas médicas** con graduaciones
+- **Notificaciones** para revisiones periódicas
 
-### 📊 **Dashboard Profesional**
-- Interfaz moderna con Tailwind CSS
-- Gráficos interactivos con Plotly
-- Vista general del mercado
-- Métricas en tiempo real
+### 🔧 Módulo de Taller
+- **Órdenes de trabajo** con seguimiento
+- **Asignación de tareas** a técnicos
+- **Control de calidad**
+- **Gestión de recursos** y mantenimiento
 
-## 🛠️ Instalación Local
+### 📊 Sistema de Reportes
+- **Dashboard** con estadísticas en tiempo real
+- **Reportes en PDF y Excel**
+- **Gráficos interactivos**
+- **Estadísticas de ventas, inventario y taller**
 
-### Prerrequisitos
-- Python 3.12+
-- pip (gestor de paquetes)
+## 🚀 Instalación y Configuración
 
-### Pasos de Instalación
+### Requisitos
+- Python 3.8+
+- Django 5.2+
+- SQLite (incluido) o PostgreSQL
+- Pillow para manejo de imágenes
+- ReportLab para PDFs
+
+### Instalación
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/tu-usuario/crypto-predictor.git
-cd crypto-predictor
+git clone <url-del-repositorio>
+cd optica_mipyme
 ```
 
 2. **Crear entorno virtual**
 ```bash
 python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# o
 venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
 ```
 
 3. **Instalar dependencias**
 ```bash
-pip install -r requirements.txt
+pip install django djangorestframework pillow reportlab openpyxl django-extensions python-decouple
 ```
 
-4. **Ejecutar la aplicación**
+4. **Configurar base de datos**
 ```bash
-python app.py
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-5. **Abrir en el navegador**
-```
-http://localhost:5000
-```
-
-## 🚀 Despliegue en la Web
-
-### Opción 1: Railway (Recomendado)
-
-1. **Crear cuenta en Railway**
-   - Ve a [railway.app](https://railway.app)
-   - Regístrate con tu cuenta de GitHub
-
-2. **Conectar repositorio**
-   - Haz clic en "New Project"
-   - Selecciona "Deploy from GitHub repo"
-   - Conecta tu repositorio de GitHub
-
-3. **Configurar variables de entorno**
-   - Ve a la pestaña "Variables"
-   - Agrega: `FLASK_ENV=production`
-
-4. **Desplegar**
-   - Railway detectará automáticamente que es una app Flask
-   - Se desplegará automáticamente
-
-### Opción 2: Render
-
-1. **Crear cuenta en Render**
-   - Ve a [render.com](https://render.com)
-   - Regístrate con tu cuenta de GitHub
-
-2. **Crear nuevo servicio**
-   - Selecciona "Web Service"
-   - Conecta tu repositorio de GitHub
-
-3. **Configurar**
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Environment**: `FLASK_ENV=production`
-
-### Opción 3: Heroku
-
-1. **Instalar Heroku CLI**
+5. **Crear superusuario**
 ```bash
-# Descargar desde heroku.com
+python manage.py createsuperuser
 ```
 
-2. **Login y crear app**
+6. **Ejecutar servidor**
 ```bash
-heroku login
-heroku create tu-app-name
+python manage.py runserver
 ```
 
-3. **Desplegar**
-```bash
-git add .
-git commit -m "Initial deployment"
-git push heroku main
+## 👤 Usuario de Prueba
+
+**Administrador:**
+- Usuario: `admin`
+- Contraseña: `admin123`
+- Email: `admin@optica.com`
+
+## 🌐 Acceso al Sistema
+
+Una vez iniciado el servidor, accede a:
+- **Aplicación principal**: http://localhost:8000
+- **Panel de administración**: http://localhost:8000/admin
+
+## 📱 Interfaz de Usuario
+
+### Dashboard Principal
+- **Estadísticas en tiempo real**
+- **Gráficos de ventas por mes**
+- **Estado de órdenes del taller**
+- **Productos con bajo stock**
+- **Top vendedores del mes**
+
+### Módulos Principales
+
+#### 🛍️ Ventas
+- Crear nuevas ventas
+- Seleccionar cliente y productos
+- Aplicar descuentos
+- Registrar pagos en múltiples monedas
+- Generar facturas PDF
+
+#### 👥 Clientes
+- Registro de nuevos clientes
+- Gestión de recetas médicas
+- Historial de compras
+- Notificaciones automáticas
+
+#### 📦 Productos
+- **Monturas**: Código, nombre, material, género, precio, stock
+- **Cristales**: Tipo, graduación, tratamientos, rangos de dioptrías
+- Control de inventario automático
+
+#### 🔧 Taller
+- Órdenes de trabajo automáticas desde ventas
+- Asignación de técnicos
+- Seguimiento de tareas
+- Control de calidad
+- Gestión de recursos
+
+## 🔧 Configuración Avanzada
+
+### Variables de Entorno (.env)
+```env
+SECRET_KEY=tu-clave-secreta-aqui
+DEBUG=True
+DATABASE_URL=sqlite:///db.sqlite3
 ```
 
-## 📁 Estructura del Proyecto
+### Monedas Soportadas
+- **CUP**: Pesos Cubanos
+- **USD**: Dólares Americanos  
+- **EUR**: Euros
+- **MLC**: Moneda Libremente Convertible
+
+### Roles de Usuario
+- **administrador**: Acceso completo
+- **vendedor**: Ventas y clientes
+- **tecnico**: Taller y producción
+
+## 📊 Funcionalidades Especiales
+
+### Reportes Automáticos
+- **Ventas diarias, semanales y mensuales**
+- **Control de inventario**
+- **Productividad del taller**
+- **Clientes recurrentes**
+
+### Notificaciones
+- **Productos con bajo stock**
+- **Órdenes atrasadas**
+- **Revisiones de recetas vencidas**
+- **Mantenimiento de equipos**
+
+### API REST
+- Endpoints para integración con otros sistemas
+- Búsqueda de productos y clientes
+- Estadísticas en JSON
+
+## 🔄 Flujo de Trabajo Típico
+
+1. **Administrador** registra productos (monturas y cristales)
+2. **Vendedor** registra cliente y crea venta con receta
+3. Sistema genera **orden de trabajo** automáticamente
+4. **Técnico** procesa la orden en el taller
+5. **Control de calidad** aprueba el trabajo
+6. Cliente recibe notificación para **recoger producto**
+7. Se registra **pago** y entrega
+8. Sistema genera **reportes** automáticos
+
+## 🛠️ Estructura del Proyecto
 
 ```
-crypto-predictor/
-├── app.py                 # Aplicación principal Flask
-├── requirements.txt       # Dependencias Python
-├── Procfile             # Configuración para Heroku
-├── runtime.txt          # Versión de Python
-├── wsgi.py             # Servidor WSGI
-├── config.py           # Configuración de la app
-├── templates/          # Plantillas HTML
-│   ├── index.html      # Página principal
-│   └── advanced_dashboard.html
-├── static/             # Archivos estáticos
-│   ├── css/
-│   ├── js/
-│   └── images/
-└── README.md           # Este archivo
+optica_mipyme/
+├── usuarios/          # Gestión de usuarios y roles
+├── productos/         # Monturas, cristales e inventario
+├── clientes/          # Clientes y recetas médicas
+├── ventas/           # Ventas, facturas y pagos
+├── taller/           # Órdenes de trabajo y control de calidad
+├── reportes/         # Dashboard y reportes
+├── templates/        # Plantillas HTML
+├── static/          # Archivos CSS, JS e imágenes
+└── media/           # Uploads (fotos de productos)
 ```
 
-## 🔧 Configuración
+## 🔧 Personalización
 
-### Variables de Entorno
+### Agregar Nuevos Campos
+1. Modificar modelos en `models.py`
+2. Crear migración: `python manage.py makemigrations`
+3. Aplicar migración: `python manage.py migrate`
 
-```bash
-# Desarrollo
-FLASK_ENV=development
-SECRET_KEY=tu-clave-secreta
+### Nuevos Reportes
+1. Crear vista en `reportes/views.py`
+2. Agregar URL en `reportes/urls.py`
+3. Crear template correspondiente
 
-# Producción
-FLASK_ENV=production
-SECRET_KEY=clave-secreta-produccion
-```
-
-### Personalización
-
-- **Criptomonedas**: Edita `POPULAR_CRYPTOS` en `app.py`
-- **Modelo ML**: Modifica `CryptoPredictor` para cambiar el algoritmo
-- **Interfaz**: Edita las plantillas HTML en `templates/`
-
-## 📊 API Endpoints
-
-### Predicción
-- `POST /predict` - Predicción de precio
-- `GET /api/popular_cryptos` - Lista de criptomonedas
-- `POST /api/compare_cryptos` - Comparación múltiple
-
-### Alertas
-- `POST /api/set_alert` - Configurar alerta
-- `GET /api/check_alerts` - Verificar alertas
-- `DELETE /api/delete_alert` - Eliminar alerta
-
-### Análisis Avanzado
-- `GET /api/sentiment_analysis/<symbol>` - Análisis de sentimiento
-- `GET /api/technical_analysis/<symbol>` - Análisis técnico
-- `POST /api/backtest/<symbol>/<strategy>` - Backtesting
-
-## 🎯 Uso de la Aplicación
-
-### 1. **Predicción Básica**
-1. Selecciona una criptomoneda
-2. Haz clic en "Predecir"
-3. Revisa las predicciones y consejos
-
-### 2. **Comparación Múltiple**
-1. Selecciona hasta 5 criptomonedas
-2. Haz clic en "Comparar"
-3. Analiza el ranking por oportunidad
-
-### 3. **Configurar Alertas**
-1. Ve a la sección "Alertas"
-2. Establece precio objetivo
-3. Recibe notificaciones automáticas
-
-### 4. **Dashboard Avanzado**
-1. Accede a `/advanced_dashboard`
-2. Explora análisis técnico
-3. Prueba estrategias de backtesting
+### Integración con Hardware
+- **Lectores de código de barras**
+- **Impresoras térmicas**
+- **Cajones de dinero**
+- **Balanzas digitales**
 
 ## 🔒 Seguridad
 
-- ✅ Validación de entrada
-- ✅ Sanitización de datos
-- ✅ Manejo de errores
-- ✅ Rate limiting básico
-- ✅ Variables de entorno seguras
+- **Autenticación obligatoria** para todas las vistas
+- **Control de permisos** por rol de usuario
+- **Validación de datos** en formularios
+- **Protección CSRF** habilitada
+- **Sanitización** de inputs
 
-## 🐛 Solución de Problemas
+## 📱 Funcionalidad Offline (Próximamente)
 
-### Error: "ModuleNotFoundError"
+- **Cache local** de datos críticos
+- **Sincronización automática** cuando hay conexión
+- **Modo offline** para ventas básicas
+- **Backup automático** de datos
+
+## 🐛 Resolución de Problemas
+
+### Error de Migración
 ```bash
-pip install -r requirements.txt
+python manage.py migrate --fake-initial
 ```
 
-### Error: "Port already in use"
+### Resetear Base de Datos
 ```bash
-# Cambiar puerto en app.py
-app.run(port=5001)
+rm db.sqlite3
+python manage.py migrate
+python manage.py createsuperuser
 ```
 
-### Error: "JSON serialization"
-- Los datos se convierten automáticamente a tipos nativos de Python
+### Problemas con Archivos Estáticos
+```bash
+python manage.py collectstatic
+```
 
-## 📈 Roadmap
+## 📝 Licencia
 
-- [ ] Autenticación de usuarios
-- [ ] Base de datos PostgreSQL
-- [ ] Más modelos de ML
-- [ ] API pública
-- [ ] App móvil
-- [ ] Integración con exchanges
+Este proyecto está desarrollado para uso educativo y comercial. 
 
-## 🤝 Contribuir
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
 
 1. Fork el proyecto
-2. Crea una rama: `git checkout -b feature/nueva-funcionalidad`
-3. Commit: `git commit -m 'Agregar nueva funcionalidad'`
-4. Push: `git push origin feature/nueva-funcionalidad`
+2. Crea una rama para tu feature
+3. Commit tus cambios
+4. Push a la rama
 5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
 ## 📞 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/crypto-predictor/issues)
-- **Email**: soporte@cryptopredictor.com
-- **Documentación**: [Wiki del proyecto](https://github.com/tu-usuario/crypto-predictor/wiki)
+Para soporte técnico o consultas:
+- **Email**: soporte@optica-mipyme.cu
+- **Teléfono**: +53 xxxx-xxxx
 
 ---
 
-**⚠️ Descargo de Responsabilidad**: Esta aplicación es solo para fines educativos. No constituye consejo financiero. Siempre haz tu propia investigación antes de invertir.
+**© 2024 Óptica MIPYME - Sistema de Gestión Integral**
 
-**⭐ Si te gusta el proyecto, ¡dale una estrella en GitHub!** 
+*Desarrollado con ❤️ para las pequeñas empresas cubanas* 

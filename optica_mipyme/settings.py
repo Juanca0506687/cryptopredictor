@@ -159,3 +159,6 @@ ROLES_USUARIO = [
     ('vendedor', 'Vendedor'),
     ('tecnico', 'Técnico'),
 ]
+
+# Modelo de usuario personalizado
+AUTH_USER_MODEL = 'usuarios.Usuario'
