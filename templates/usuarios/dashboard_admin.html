@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Administrador{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-speedometer2"></i> Dashboard - Administrador
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-calendar"></i> Hoy
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas Principales -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center">
+            <div class="stats-number">{{ total_usuarios|default:0 }}</div>
+            <div>Usuarios Activos</div>
+            <i class="bi bi-people" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stats-number">{{ usuarios_conectados|default:0 }}</div>
+            <div>Usuarios Conectados</div>
+            <i class="bi bi-wifi" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stats-number">0</div>
+            <div>Ventas Hoy</div>
+            <i class="bi bi-cart3" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stats-number">0</div>
+            <div>Órdenes Pendientes</div>
+            <i class="bi bi-tools" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Accesos Rápidos -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning"></i> Accesos Rápidos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-primary w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-cart-plus d-block mb-2" style="font-size: 2rem;"></i>
+                            Nueva Venta
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-success w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-person-plus d-block mb-2" style="font-size: 2rem;"></i>
+                            Nuevo Cliente
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-info w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-box-seam d-block mb-2" style="font-size: 2rem;"></i>
+                            Nuevo Producto
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="{% url 'usuarios:crear_usuario' %}" class="btn btn-outline-warning w-100 p-3">
+                            <i class="bi bi-person-gear d-block mb-2" style="font-size: 2rem;"></i>
+                            Nuevo Usuario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resumen de Actividades -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-activity"></i> Actividad Reciente
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Sistema Inicializado</strong><br>
+                    El sistema está listo para usar. Comience creando usuarios, productos y clientes.
+                </div>
+                
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Sistema Instalado</h6>
+                            <small>Hace unos momentos</small>
+                        </div>
+                        <p class="mb-1">La aplicación ha sido configurada correctamente.</p>
+                        <small>Usuario: {{ user.username }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Alertas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-gear"></i>
+                    <strong>Configuración Inicial</strong><br>
+                    <small>Configure las tasas de cambio y categorías de productos.</small>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-people"></i>
+                    <strong>Usuarios</strong><br>
+                    <small>Cree usuarios para vendedores y técnicos.</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-graph-up"></i> Resumen del Sistema
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-primary">0</h4>
+                        <small class="text-muted">Productos</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">0</h4>
+                        <small class="text-muted">Clientes</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-warning">0</h4>
+                        <small class="text-muted">Ventas</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-info">0</h4>
+                        <small class="text-muted">Órdenes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enlaces Útiles -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-link-45deg"></i> Enlaces Útiles
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h6><i class="bi bi-gear"></i> Administración</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="/admin/" target="_blank" class="text-decoration-none">Panel de Administración Django</a></li>
+                            <li><a href="{% url 'usuarios:lista_usuarios' %}" class="text-decoration-none">Gestión de Usuarios</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><i class="bi bi-question-circle"></i> Ayuda</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-decoration-none" onclick="alert('Manual en desarrollo')">Manual de Usuario</a></li>
+                            <li><a href="#" class="text-decoration-none" onclick="alert('Soporte en desarrollo')">Soporte Técnico</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6><i class="bi bi-info-circle"></i> Información</h6>
+                        <ul class="list-unstyled">
+                            <li>Versión: 1.0.0</li>
+                            <li>Desarrollado para MIPYMES cubanas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

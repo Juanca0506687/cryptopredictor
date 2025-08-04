@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Usuario{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-person-plus"></i> Crear Nuevo Usuario
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Volver a la Lista
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-circle"></i> Información del Usuario
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- Información Básica -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary border-bottom pb-2">
+                                <i class="bi bi-info-circle"></i> Información Básica
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                <i class="bi bi-person"></i> Nombre de Usuario *
+                            </label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.username.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Nombre único para iniciar sesión en el sistema
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                <i class="bi bi-envelope"></i> Email *
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.email.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                <i class="bi bi-person-badge"></i> Nombre *
+                            </label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.first_name.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                <i class="bi bi-person-badge"></i> Apellidos *
+                            </label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.last_name.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Información de Contacto -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary border-bottom pb-2">
+                                <i class="bi bi-telephone"></i> Información de Contacto
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.telefono.id_for_label }}" class="form-label">
+                                <i class="bi bi-phone"></i> Teléfono
+                            </label>
+                            {{ form.telefono }}
+                            {% if form.telefono.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.telefono.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.cedula.id_for_label }}" class="form-label">
+                                <i class="bi bi-card-text"></i> Cédula de Identidad
+                            </label>
+                            {{ form.cedula }}
+                            {% if form.cedula.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.cedula.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                11 dígitos de la cédula cubana
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 mb-3">
+                            <label for="{{ form.direccion.id_for_label }}" class="form-label">
+                                <i class="bi bi-geo-alt"></i> Dirección
+                            </label>
+                            {{ form.direccion }}
+                            {% if form.direccion.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.direccion.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Configuración del Sistema -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary border-bottom pb-2">
+                                <i class="bi bi-gear"></i> Configuración del Sistema
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.rol.id_for_label }}" class="form-label">
+                                <i class="bi bi-shield"></i> Rol del Usuario *
+                            </label>
+                            {{ form.rol }}
+                            {% if form.rol.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.rol.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Define los permisos y accesos del usuario
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check form-switch mt-4">
+                                {{ form.activo }}
+                                <label class="form-check-label" for="{{ form.activo.id_for_label }}">
+                                    <i class="bi bi-toggle-on"></i> Usuario Activo
+                                </label>
+                            </div>
+                            <div class="form-text">
+                                El usuario podrá iniciar sesión en el sistema
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contraseñas -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary border-bottom pb-2">
+                                <i class="bi bi-lock"></i> Contraseña de Acceso
+                            </h6>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                <i class="bi bi-key"></i> Contraseña *
+                            </label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password1.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Mínimo 8 caracteres
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                <i class="bi bi-key-fill"></i> Confirmar Contraseña *
+                            </label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password2.errors %}
+                                        <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Botones de Acción -->
+                    <div class="row">
+                        <div class="col-12">
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i> Crear Usuario
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Panel de Ayuda -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-question-circle"></i> Ayuda
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6><i class="bi bi-shield-check"></i> Roles del Sistema</h6>
+                <div class="mb-3">
+                    <div class="alert alert-danger alert-sm">
+                        <strong>Administrador:</strong><br>
+                        <small>Acceso completo al sistema. Puede gestionar usuarios, productos, ventas y configuraciones.</small>
+                    </div>
+                    <div class="alert alert-primary alert-sm">
+                        <strong>Vendedor:</strong><br>
+                        <small>Puede realizar ventas, gestionar clientes y ver reportes de sus ventas.</small>
+                    </div>
+                    <div class="alert alert-success alert-sm">
+                        <strong>Técnico:</strong><br>
+                        <small>Acceso al taller, gestión de órdenes de trabajo y control de calidad.</small>
+                    </div>
+                </div>
+                
+                <h6><i class="bi bi-info-circle"></i> Consejos</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="bi bi-check text-success"></i>
+                        <small>Use nombres de usuario fáciles de recordar</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check text-success"></i>
+                        <small>Las contraseñas deben ser seguras</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check text-success"></i>
+                        <small>Complete toda la información de contacto</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check text-success"></i>
+                        <small>Verifique el rol antes de crear el usuario</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-shield-exclamation"></i> Seguridad
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Importante:</strong><br>
+                    <small>Solo los administradores pueden crear usuarios. Asegúrese de que la información sea correcta antes de guardar.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
