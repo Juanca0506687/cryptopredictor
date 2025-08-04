@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Vendedor{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-cart3"></i> Dashboard - Vendedor
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-calendar"></i> Hoy
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas del Vendedor -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stats-number">0</div>
+            <div>Ventas Hoy</div>
+            <i class="bi bi-cart-check" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stats-number">$0</div>
+            <div>Ingresos Hoy</div>
+            <i class="bi bi-currency-dollar" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stats-number">0</div>
+            <div>Clientes Atendidos</div>
+            <i class="bi bi-people" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <div class="stats-number">0%</div>
+            <div>Comisión del Mes</div>
+            <i class="bi bi-percent" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Accesos Rápidos para Vendedor -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning"></i> Accesos Rápidos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-primary w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-cart-plus d-block mb-2" style="font-size: 2rem;"></i>
+                            Nueva Venta
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-success w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-person-plus d-block mb-2" style="font-size: 2rem;"></i>
+                            Nuevo Cliente
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-info w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-search d-block mb-2" style="font-size: 2rem;"></i>
+                            Buscar Cliente
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-warning w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-receipt d-block mb-2" style="font-size: 2rem;"></i>
+                            Ver Ventas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ventas Recientes y Tareas -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history"></i> Ventas Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>¡Bienvenido!</strong><br>
+                    Aquí verás tus ventas más recientes una vez que comiences a usar el sistema.
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Factura</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    <i class="bi bi-inbox"></i><br>
+                                    No hay ventas registradas aún
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-check"></i> Tareas Pendientes
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-telephone text-primary"></i>
+                            Llamar clientes para revisión
+                        </div>
+                        <span class="badge bg-primary rounded-pill">0</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-truck text-success"></i>
+                            Órdenes listas para entrega
+                        </div>
+                        <span class="badge bg-success rounded-pill">0</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-cash text-warning"></i>
+                            Pagos pendientes
+                        </div>
+                        <span class="badge bg-warning rounded-pill">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-trophy"></i> Mi Rendimiento
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-12 mb-3">
+                        <h4 class="text-primary">0</h4>
+                        <small class="text-muted">Ventas este mes</small>
+                    </div>
+                </div>
+                <div class="progress mb-3">
+                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <small class="text-muted">Meta mensual: 50 ventas</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Productos Más Vendidos -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-star"></i> Productos Más Vendidos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="p-3 border rounded">
+                            <i class="bi bi-eyeglasses text-primary" style="font-size: 3rem;"></i>
+                            <h6 class="mt-2">Monturas</h6>
+                            <p class="text-muted">0 vendidas</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="p-3 border rounded">
+                            <i class="bi bi-circle text-info" style="font-size: 3rem;"></i>
+                            <h6 class="mt-2">Cristales</h6>
+                            <p class="text-muted">0 vendidos</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="p-3 border rounded">
+                            <i class="bi bi-tools text-success" style="font-size: 3rem;"></i>
+                            <h6 class="mt-2">Servicios</h6>
+                            <p class="text-muted">0 realizados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

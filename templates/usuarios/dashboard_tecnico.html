@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Técnico{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-tools"></i> Dashboard - Técnico
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-calendar"></i> Hoy
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas del Taller -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="stats-number">0</div>
+            <div>Órdenes Pendientes</div>
+            <i class="bi bi-hourglass-split" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stats-number">0</div>
+            <div>En Proceso</div>
+            <i class="bi bi-gear" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stats-number">0</div>
+            <div>Completadas Hoy</div>
+            <i class="bi bi-check-circle" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card text-center" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <div class="stats-number">0</div>
+            <div>Retrasadas</div>
+            <i class="bi bi-exclamation-triangle" style="font-size: 2rem; opacity: 0.7;"></i>
+        </div>
+    </div>
+</div>
+
+<!-- Accesos Rápidos para Técnico -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning"></i> Accesos Rápidos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-primary w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-list-task d-block mb-2" style="font-size: 2rem;"></i>
+                            Mis Órdenes
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-success w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-play-circle d-block mb-2" style="font-size: 2rem;"></i>
+                            Iniciar Trabajo
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-info w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-check-square d-block mb-2" style="font-size: 2rem;"></i>
+                            Completar Orden
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="#" class="btn btn-outline-warning w-100 p-3" onclick="alert('Módulo en desarrollo')">
+                            <i class="bi bi-wrench d-block mb-2" style="font-size: 2rem;"></i>
+                            Herramientas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Órdenes de Trabajo y Estado -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clipboard-check"></i> Mis Órdenes de Trabajo
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>¡Bienvenido al Taller!</strong><br>
+                    Aquí verás las órdenes de trabajo asignadas a ti.
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Orden</th>
+                                <th>Cliente</th>
+                                <th>Tipo</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Entrega</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    <i class="bi bi-inbox"></i><br>
+                                    No hay órdenes asignadas aún
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock"></i> Horario de Trabajo
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h4 id="current-time" class="text-primary"></h4>
+                    <p class="text-muted">Hora actual</p>
+                </div>
+                
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Entrada:</span>
+                        <strong>8:00 AM</strong>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Salida:</span>
+                        <strong>5:00 PM</strong>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Almuerzo:</span>
+                        <strong>12:00 - 1:00 PM</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-speedometer2"></i> Mi Productividad
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-success">0</h4>
+                        <small class="text-muted">Completadas</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-primary">0h</h4>
+                        <small class="text-muted">Tiempo promedio</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <h5 class="text-warning">100%</h5>
+                    <small class="text-muted">Eficiencia</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Herramientas y Equipos -->
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-wrench"></i> Estado de Herramientas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <div class="p-3 border rounded mb-3">
+                            <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Disponibles</h6>
+                            <p class="text-muted">0</p>
+                        </div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <div class="p-3 border rounded mb-3">
+                            <i class="bi bi-tools text-warning" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">En Mantenimiento</h6>
+                            <p class="text-muted">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-clipboard-data"></i> Control de Calidad
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h4 class="text-success">0</h4>
+                        <small class="text-muted">Aprobados</small>
+                    </div>
+                    <div class="col-4">
+                        <h4 class="text-warning">0</h4>
+                        <small class="text-muted">Ajustes</small>
+                    </div>
+                    <div class="col-4">
+                        <h4 class="text-danger">0</h4>
+                        <small class="text-muted">Rechazados</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <h5 class="text-primary">100%</h5>
+                    <small class="text-muted">Índice de Calidad</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Actualizar reloj en tiempo real
+function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('es-CU');
+    document.getElementById('current-time').textContent = timeString;
+}
+
+// Actualizar cada segundo
+setInterval(updateTime, 1000);
+updateTime(); // Llamar inmediatamente
+</script>
+{% endblock %}
